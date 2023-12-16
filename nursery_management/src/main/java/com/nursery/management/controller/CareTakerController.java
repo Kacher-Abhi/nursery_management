@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import com.nursery.management.entity.Admin;
@@ -31,22 +29,6 @@ public class CareTakerController {
 
     @Autowired
     private AdminService adminService;
-
-    @PostMapping("/{nurseryId}")
-    public ResponseEntity<CareTaker> createCaretaker(
-            @RequestBody CareTaker caretaker,
-            @PathVariable String nurseryId,
-            Authentication authentication
-    ) {
-        Admin admin = adminService.getAdminByEmail(authentication.getName());
-
-        if (admin != null && admin.getNursery().getNurseryId().equals(nurseryId)) {
-            CareTaker createdCaretaker = caretakerService.createCaretaker(caretaker, nurseryId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdCaretaker);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-    }
 
     @GetMapping("/byNursery/{nurseryId}")
     public ResponseEntity<List<CareTaker>> getCaretakersByNursery(@PathVariable String nurseryId) {

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Admin;
 import com.nursery.management.entity.Nursery;
-import com.nursery.management.entity.Role;
 import com.nursery.management.repository.AdminRepository;
 import com.nursery.management.repository.NurseryRepository;
 
@@ -32,21 +31,7 @@ public class AdminService {
 		return adminRepository.findByNursery(nursery);
 	}
 
-	public Admin createAdmin(Admin admin) {
-		String nurseryId = admin.getNurseryId();
-		Nursery nursery = nurseryRepository.findById(nurseryId)
-				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
-
-		if (nurseryId != null) {
-			admin.setNursery(nursery);
-		}
-		
-		Set<Role> roles = new HashSet<>();
-        roles.add(Role.ADMIN);
-        admin.setRoles(roles);
-
-		return adminRepository.save(admin);
-	}
+	
 	
     public Admin getAdminByEmail(String email) {
         return adminRepository.findByEmail(email);

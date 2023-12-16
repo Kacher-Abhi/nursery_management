@@ -42,12 +42,6 @@ public class AdminController {
 		return adminService.getAdminsByNursery(nursery);
 	}
 
-	@PostMapping
-	public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
-		Admin createdAdmin = adminService.createAdmin(admin);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
-	}
-
 	@PutMapping("/{adminId}")
     public ResponseEntity<Admin> updateAdmin(@PathVariable Long adminId, @RequestBody Admin updatedAdmin) {
         try {

@@ -41,10 +41,6 @@ public class Admin {
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
     private List<CareTaker> caretakers;
     
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "admin_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
 
 
     private boolean isSuperAdmin;
@@ -125,17 +121,8 @@ public class Admin {
 	}
 
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-
 	public Admin(Long adminId, String name, String email, String phone_number, String password, String nurseryId,
-			Nursery nursery, List<CareTaker> caretakers, Set<Role> roles, boolean isSuperAdmin) {
+			Nursery nursery, List<CareTaker> caretakers, boolean isSuperAdmin) {
 		super();
 		this.adminId = adminId;
 		this.name = name;
@@ -145,7 +132,6 @@ public class Admin {
 		this.nurseryId = nurseryId;
 		this.nursery = nursery;
 		this.caretakers = caretakers;
-		this.roles = roles;
 		this.isSuperAdmin = isSuperAdmin;
 	}
 
