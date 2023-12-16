@@ -31,6 +31,8 @@ public class Admin {
     private String phone_number;
     private String password;
     
+    private int age;
+    
     @Transient
     private String nurseryId;
 
