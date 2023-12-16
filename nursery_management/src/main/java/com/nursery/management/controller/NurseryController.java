@@ -1,10 +1,17 @@
 package com.nursery.management.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +19,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.service.NurseryService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/nurseries")
@@ -40,11 +50,46 @@ public class NurseryController {
             return ResponseEntity.notFound().build();
         }
     }
+    @Value("${upoadDir}")
+	private String uploadFolder;
 
-    @PostMapping
-    public ResponseEntity<Nursery> createNursery(@RequestBody Nursery nursery) {
-        Nursery createdNursery = nurseryService.createNursery(nursery);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdNursery);
+    @PostMapping("/createNursery")
+    public ResponseEntity<?> createNursery(@RequestParam("nurseryId") String nurseryId,@RequestParam("nurseryName") String nurseryName,@RequestParam("primaryColor") String primaryColor,
+    										@RequestParam("secondaryColor") String secondaryColor, final @RequestParam("image") MultipartFile file,Model model, HttpServletRequest request) {
+    	try {
+    		String uploadDirectory = request.getServletContext().getRealPath(uploadFolder);
+			String fileName = file.getOriginalFilename();
+			String filePath = Paths.get(uploadDirectory, fileName).toString();
+			if (fileName == null || fileName.contains("..")) {
+				model.addAttribute("invalid", "Sorry! Filename contains invalid path sequence \" + fileName");
+				return new ResponseEntity<>("Sorry! Filename contains invalid path sequence " + fileName, HttpStatus.BAD_REQUEST);
+			}
+			Date createDate = new Date();
+			try {
+				File dir = new File(uploadDirectory);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				// Save the file locally
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+				stream.write(file.getBytes());
+				stream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			byte[] imageData = file.getBytes();
+    	Nursery createdNursery = new Nursery();
+    	createdNursery.setNurseryName(nurseryName);
+    	createdNursery.setNurseryId(nurseryId);
+    	createdNursery.setPrimaryColor(primaryColor);
+    	createdNursery.setSecondaryColor(secondaryColor);
+    	createdNursery.setImage(imageData);
+    	nurseryService.createNursery(createdNursery);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Nursery Added Successfully");
+    	} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
     }
 
     @PutMapping("/{nurseryId}")

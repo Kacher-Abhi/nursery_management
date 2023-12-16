@@ -6,6 +6,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,7 +21,7 @@ public class Nursery {
 	private String nurseryName;
 	
 	@Column(name = "Primary_Color", nullable = false)
-	private String primaryColor;
+	private String primaryColor; 
 	
 	@Column(name = "Secondary_Color", nullable = false)
 	private String secondaryColor;
@@ -31,6 +32,9 @@ public class Nursery {
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<CareTaker> caretakers;
 	
+	@Lob
+    @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
+    private byte[] image;
 	
 	public String getNurseryId() {
 		return nurseryId;
@@ -82,7 +86,13 @@ public class Nursery {
 		return caretakers;
 	}
     
-    
+    public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 	
 
 	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, List<Admin> admins,
