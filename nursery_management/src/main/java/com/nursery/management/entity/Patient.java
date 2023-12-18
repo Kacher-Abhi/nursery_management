@@ -1,7 +1,10 @@
 package com.nursery.management.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -17,7 +21,7 @@ public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
-	private Long patientId;
+	private String patientId;
 
 	@Column(nullable = false)
 	private String name;
@@ -42,11 +46,14 @@ public class Patient {
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-	public Long getPatientId() {
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+	private List<Test> test;
+
+	public String getPatientId() {
 		return patientId;
 	}
 
-	public void setPatientId(Long patientId) {
+	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
 
@@ -106,7 +113,16 @@ public class Patient {
 		this.nursery = nursery;
 	}
 
-	public Patient(Long patientId, String name, int age, String phoneNumber, String email, String sex) {
+	public List<Test> getTest() {
+		return test;
+	}
+
+	public void setTest(List<Test> test) {
+		this.test = test;
+	}
+
+	public Patient(String patientId, String name, int age, String phoneNumber, String email, String sex,
+			String nurseryId) {
 		super();
 		this.patientId = patientId;
 		this.name = name;
@@ -114,6 +130,7 @@ public class Patient {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.sex = sex;
+		this.nurseryId = nurseryId;
 	}
 
 	public Patient() {

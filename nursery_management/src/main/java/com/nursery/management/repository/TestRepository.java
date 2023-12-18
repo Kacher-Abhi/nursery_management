@@ -16,7 +16,7 @@ public interface TestRepository extends JpaRepository<Test, Long>{
 	
 	List<Test> findByPatient(Patient patient);
 	
-	List<Test> findByCareTaker(CareTaker careTaker);
+	List<Test> findByCaretaker(CareTaker careTaker);
 
 
 }

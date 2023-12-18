@@ -25,10 +25,6 @@ public class PatientService {
 		return patientRepository.findAll();
 	}
 
-	public List<Patient> getAdminsByNursery(Nursery nursery) {
-		return patientRepository.findByNursery(nursery);
-	}
-
 	public Patient createPatient(Patient patient) {
 		String nurseryId = patient.getNurseryId();
 		Nursery nursery = nurseryRepository.findById(nurseryId)
@@ -48,12 +44,12 @@ public class PatientService {
 		return patientRepository.findByNursery(nursery);
 	}
 
-	public Patient getPatientById(Long patientId) {
+	public Patient getPatientById(String patientId) {
 		return patientRepository.findById(patientId)
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 	}
 
-	public void deletePatient(Long patientId) {
+	public void deletePatient(String patientId) {
 		Patient admin = getPatientById(patientId);
 		patientRepository.delete(admin);
 	}

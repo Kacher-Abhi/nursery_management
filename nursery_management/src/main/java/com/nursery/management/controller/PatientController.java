@@ -28,7 +28,7 @@ public class PatientController {
 		return patientService.getAllPatients();
 	}
 
-	@PostMapping
+	@PostMapping("/createPatient")
 	public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
 		Patient createdPatient = patientService.createPatient(patient);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
@@ -41,7 +41,7 @@ public class PatientController {
 	}
 
 	@GetMapping("/{patientId}")
-	public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
+	public ResponseEntity<Patient> getPatientById(@PathVariable String patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {
@@ -52,7 +52,7 @@ public class PatientController {
 	}
 
 	@DeleteMapping("/{patientId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable Long patientId) {
+	public ResponseEntity<Void> deleteCaretaker(@PathVariable String patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {

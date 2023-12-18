@@ -1,55 +1,35 @@
 package com.nursery.management.entity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 @Entity
 public class Admin {
-    
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long adminId;
 
-    private String name;
-    private String email;
-    private String phone_number;
-    private String password;
-    
-    private int age;
-    
-    @Transient
-    private String nurseryId;
+	private String name;
+	private String email;
+	private String phone_number;
+	private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "nursery_id")
-    private Nursery nursery;
-    
-    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
-    private List<CareTaker> caretakers;
-    
+	@Transient
+	private String nurseryId;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "nursery_id")
+	private Nursery nursery;
 
-    private boolean isSuperAdmin;
+//	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+//	private List<CareTaker> caretakers;
 
-	
-    
-    public Long getAdminId() {
+	private boolean isSuperAdmin;
+
+	public Long getAdminId() {
 		return adminId;
 	}
 
@@ -112,19 +92,17 @@ public class Admin {
 	public void setSuperAdmin(boolean isSuperAdmin) {
 		this.isSuperAdmin = isSuperAdmin;
 	}
-	
-	
-	public List<CareTaker> getCaretakers() {
-		return caretakers;
-	}
 
-	public void setCaretakers(List<CareTaker> caretakers) {
-		this.caretakers = caretakers;
-	}
-
+//	public List<CareTaker> getCaretakers() {
+//		return caretakers;
+//	}
+//
+//	public void setCaretakers(List<CareTaker> caretakers) {
+//		this.caretakers = caretakers;
+//	}
 
 	public Admin(Long adminId, String name, String email, String phone_number, String password, String nurseryId,
-			Nursery nursery, List<CareTaker> caretakers, boolean isSuperAdmin) {
+	 boolean isSuperAdmin, Nursery nursery) {
 		super();
 		this.adminId = adminId;
 		this.name = name;
@@ -132,17 +110,13 @@ public class Admin {
 		this.phone_number = phone_number;
 		this.password = password;
 		this.nurseryId = nurseryId;
-		this.nursery = nursery;
-		this.caretakers = caretakers;
 		this.isSuperAdmin = isSuperAdmin;
+		this.nursery = nursery;
 	}
 
 	public Admin() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-    
-	
 
 }

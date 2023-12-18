@@ -1,13 +1,16 @@
 package com.nursery.management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import com.nursery.management.entity.Admin;
+import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Patient;
 import com.nursery.management.entity.Test;
+import com.nursery.management.repository.CareTakerRepository;
 import com.nursery.management.repository.NurseryRepository;
+import com.nursery.management.repository.PatientRepository;
 import com.nursery.management.repository.TestRepository;
 
 import jakarta.persistence.*;
@@ -23,6 +26,12 @@ public class TestService {
 	@Autowired
 	private NurseryRepository nurseryRepository;
 
+	@Autowired
+	private PatientRepository patientRepository;
+
+	@Autowired
+	private CareTakerRepository careTakerRepository;
+
 	public Test getTestById(Long id) {
 		return testRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Test not found with id: " + id));
@@ -36,6 +45,18 @@ public class TestService {
 
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+
+		Patient patient = patientRepository.findById(patientId)
+				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
+
+		CareTaker caretaker = careTakerRepository.findById(careTakerId)
+				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + careTakerId));
+
+		if (nurseryId != null && patientId != null && careTakerId != null) {
+			test.setNursery(nursery);
+			test.setPatient(patient);
+			test.setCareTaker(caretaker);
+		}
 
 		return testRepository.save(test);
 

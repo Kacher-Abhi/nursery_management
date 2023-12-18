@@ -42,23 +42,36 @@ public class AdminController {
 		return adminService.getAdminsByNursery(nursery);
 	}
 
+	@PostMapping("/createAdmin")
+	public ResponseEntity<?> createAdmin(@RequestBody Admin admin) {
+		try {
+			Admin createdAdmin = adminService.createAdmin(admin);
+			return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+		}
+	}
+
 	@PutMapping("/{adminId}")
-    public ResponseEntity<Admin> updateAdmin(@PathVariable Long adminId, @RequestBody Admin updatedAdmin) {
-        try {
-            Admin admin = adminService.updateAdmin(adminId, updatedAdmin);
-            return ResponseEntity.ok(admin);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+	public ResponseEntity<?> updateAdmin(@PathVariable Long adminId, @RequestBody Admin updatedAdmin) {
+		try {
+			Admin admin = adminService.updateAdmin(adminId, updatedAdmin);
+			return ResponseEntity.ok(admin);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
 
 	@DeleteMapping("/{adminId}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable Long adminId) {
-        try {
-            adminService.deleteAdmin(adminId);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+	public ResponseEntity<Void> deleteAdmin(@PathVariable Long adminId) {
+		try {
+			adminService.deleteAdmin(adminId);
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

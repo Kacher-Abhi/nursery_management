@@ -1,5 +1,10 @@
 package com.nursery.management.entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,13 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 @Entity
 public class CareTaker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true, length = 7)
-	private Long caretakerId;
+	@Column(unique = true)
+	private String caretakerId;
 
 	private String name;
 
@@ -29,27 +36,22 @@ public class CareTaker {
 
 	private String designation;
 
+	@Transient
+	private String nurseryId;
+
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-	@ManyToOne
-	@JoinColumn(name = "admin_id")
-	private Admin admin;
+	@OneToMany(mappedBy = "caretaker", cascade = CascadeType.ALL)
+	private List<Test> test;
 
-	public Admin getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
-	}
-
-	public Long getCaretakerId() {
+	public String getCaretakerId() {
 		return caretakerId;
 	}
 
-	public void setCaretakerId(Long caretakerId) {
+	public void setCaretakerId(String caretakerId) {
 		this.caretakerId = caretakerId;
 	}
 
@@ -109,6 +111,14 @@ public class CareTaker {
 		this.designation = designation;
 	}
 
+	public String getNurseryId() {
+		return nurseryId;
+	}
+
+	public void setNurseryId(String nurseryId) {
+		this.nurseryId = nurseryId;
+	}
+
 	public Nursery getNursery() {
 		return nursery;
 	}
@@ -117,8 +127,17 @@ public class CareTaker {
 		this.nursery = nursery;
 	}
 
-	public CareTaker(Long caretakerId, String name, int age, String phoneNumber, String email, String sex,
-			int yearsOfExperience, String designation, Nursery nursery, Admin admin) {
+	
+	public List<Test> getTest() {
+		return test;
+	}
+
+	public void setTest(List<Test> test) {
+		this.test = test;
+	}
+
+	public CareTaker(String caretakerId, String name, int age, String phoneNumber, String email, String sex,
+			int yearsOfExperience, String designation, String nurseryId, Nursery nursery) {
 		super();
 		this.caretakerId = caretakerId;
 		this.name = name;
@@ -128,8 +147,8 @@ public class CareTaker {
 		this.sex = sex;
 		this.yearsOfExperience = yearsOfExperience;
 		this.designation = designation;
+		this.nurseryId = nurseryId;
 		this.nursery = nursery;
-		this.admin = admin;
 	}
 
 	public CareTaker() {

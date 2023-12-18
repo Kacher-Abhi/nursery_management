@@ -2,6 +2,8 @@ package com.nursery.management.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,31 +13,43 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Nursery {
-	
-	
+
 	@Id
-    @Column(name = "nursery_id", unique = true, nullable = false)
+	@Column(name = "nursery_id", unique = true, nullable = false)
 	private String nurseryId;
-	
+
 	@Column(name = "Nursery_name", unique = true, nullable = false)
 	private String nurseryName;
-	
+
 	@Column(name = "Primary_Color", nullable = false)
-	private String primaryColor; 
-	
+	private String primaryColor;
+
 	@Column(name = "Secondary_Color", nullable = false)
 	private String secondaryColor;
-	
+
+	@Column(name = "Email", nullable = false)
+	private String email;
+
+	@Column(name = "PhoneNumber", nullable = false)
+	private String phoneNumber;
+
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
-    private List<Admin> admins;
-	
+	private List<Admin> admins;
+
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<CareTaker> caretakers;
-	
+
+	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
+	private List<Patient> patient;
+
+	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
+	private List<Test> test;
+
+	@JsonIgnore
 	@Lob
-    @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
-    private byte[] image;
-	
+	@Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
+	private byte[] image;
+
 	public String getNurseryId() {
 		return nurseryId;
 	}
@@ -68,35 +82,64 @@ public class Nursery {
 		this.secondaryColor = secondaryColor;
 	}
 
-	
-    public List<Admin> getAdmins() {
-        return admins;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setAdmins(List<Admin> admins) {
-        this.admins = admins;
-    }
-    
-    
-    public void setCaretakers(List<CareTaker> caretakers) {
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public List<Admin> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<Admin> admins) {
+		this.admins = admins;
+	}
+
+	public void setCaretakers(List<CareTaker> caretakers) {
 		this.caretakers = caretakers;
 	}
-    
-    public List<CareTaker> getCaretakers() {
+
+	public List<CareTaker> getCaretakers() {
 		return caretakers;
 	}
-    
-    public byte[] getImage() {
+
+	public List<Patient> getPatient() {
+		return patient;
+	}
+
+	public void setPatient(List<Patient> patient) {
+		this.patient = patient;
+	}
+
+	public List<Test> getTest() {
+		return test;
+	}
+
+	public void setTest(List<Test> test) {
+		this.test = test;
+	}
+
+	public byte[] getImage() {
 		return image;
 	}
 
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
-	
 
 	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, List<Admin> admins,
-			List<CareTaker> caretakers) {
+			List<CareTaker> caretakers, String email, String phoneNumber) {
 		super();
 		this.nurseryId = nurseryId;
 		this.nurseryName = nurseryName;
@@ -104,6 +147,8 @@ public class Nursery {
 		this.secondaryColor = secondaryColor;
 		this.admins = admins;
 		this.caretakers = caretakers;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Nursery() {
@@ -111,7 +156,4 @@ public class Nursery {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
-	
 }

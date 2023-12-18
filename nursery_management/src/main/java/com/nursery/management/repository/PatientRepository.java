@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Patient;
 
-public interface PatientRepository extends JpaRepository<Patient, Long>{
+public interface PatientRepository extends JpaRepository<Patient, String>{
 	
 	List<Patient> findByNursery(Nursery nursery);
 }

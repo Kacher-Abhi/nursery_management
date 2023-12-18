@@ -15,49 +15,49 @@ import java.util.List;
 @Service
 public class CareTakerService {
 
-    @Autowired
-    private CareTakerRepository careTakerRepository;
+	@Autowired
+	private CareTakerRepository careTakerRepository;
 
-    @Autowired
-    private NurseryRepository nurseryRepository;
+	@Autowired
+	private NurseryRepository nurseryRepository;
 
-    public CareTaker createCaretaker(CareTaker caretaker, String nurseryId) {
-        Nursery nursery = nurseryRepository.findById(nurseryId)
-                .orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+	public CareTaker createCaretaker(CareTaker caretaker) {
+		String nurseryId = caretaker.getNurseryId();
+		System.out.println(nurseryId);
+		Nursery nursery = nurseryRepository.findById(caretaker.getNurseryId())
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
 
-        caretaker.setNursery(nursery);
-        return careTakerRepository.save(caretaker);
-    }
+		if (nurseryId != null) {
+			caretaker.setNursery(nursery);
+		} else {
+			throw new RuntimeException("Nursery Id should not be null");
+		}
 
-    public List<CareTaker> getCaretakersByNurseryId(String nurseryId) {
-        Nursery nursery = nurseryRepository.findById(nurseryId)
-                .orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+		return careTakerRepository.save(caretaker);
+	}
 
-        return careTakerRepository.findByNursery(nursery);
-    }
+	public List<CareTaker> getCaretakersByNurseryId(String nurseryId) {
+		Nursery nursery = nurseryRepository.findById(nurseryId)
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
 
-    public CareTaker getCaretakerById(Long caretakerId) {
-        return careTakerRepository.findById(caretakerId)
-                .orElse(null);
-    }
+		return careTakerRepository.findByNursery(nursery);
+	}
 
-    public CareTaker updateCaretaker(CareTaker updatedCaretaker) {
-        // Perform any additional validation or business logic if needed
-        return careTakerRepository.save(updatedCaretaker);
-    }
+	public CareTaker getCaretakerById(String caretakerId) {
+		return careTakerRepository.findById(caretakerId).orElse(null);
+	}
 
-    public void deleteCaretaker(Long caretakerId) {
-    	careTakerRepository.deleteById(caretakerId);
-    }
+	public CareTaker updateCaretaker(CareTaker updatedCaretaker) {
+		// Perform any additional validation or business logic if needed
+		return careTakerRepository.save(updatedCaretaker);
+	}
 
-    public List<CareTaker> getAllCaretakers() {
-        return careTakerRepository.findAll();
-    }
+	public void deleteCaretaker(String caretakerId) {
+		careTakerRepository.deleteById(caretakerId);
+	}
 
-//    public List<CareTaker> getCaretakersByAgeGreaterThan(int age) {
-//        return careTakerRepository.findByAgeGreaterThan(age);
-//    }
-
-    // Add more methods based on your requirements
+	public List<CareTaker> getAllCaretakers() {
+		return careTakerRepository.findAll();
+	}
 
 }

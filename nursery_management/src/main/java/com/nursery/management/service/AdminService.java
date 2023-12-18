@@ -1,8 +1,6 @@
 package com.nursery.management.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,11 +29,31 @@ public class AdminService {
 		return adminRepository.findByNursery(nursery);
 	}
 
-	
-	
-    public Admin getAdminByEmail(String email) {
-        return adminRepository.findByEmail(email);
-    }
+	public Admin createAdmin(Admin admin) {
+		String nurseryId = admin.getNurseryId();
+		System.out.println(nurseryId);
+		
+//		Admin createAdmin = new Admin();
+//		
+//		createAdmin.setName(admin.getName());
+//		createAdmin.setEmail(admin.getEmail());
+//		createAdmin.setNurseryId(nurseryId);
+//		createAdmin.setPassword(admin.getPassword());
+//		createAdmin.setPhone_number(admin.getPhone_number());
+//		createAdmin.setSuperAdmin(admin.isSuperAdmin());
+		Nursery nursery = nurseryRepository.findById(nurseryId)
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+		System.out.println(nursery.getNurseryId());
+		if (nurseryId != null) {
+			admin.setNursery(nursery);
+		}
+
+		return adminRepository.save(admin);
+	}
+
+	public Admin getAdminByEmail(String email) {
+		return adminRepository.findByEmail(email);
+	}
 
 	public Admin updateAdmin(Long adminId, Admin updatedAdmin) {
 		Admin existingAdmin = getAdminById(adminId);
@@ -45,7 +63,6 @@ public class AdminService {
 		existingAdmin.setEmail(updatedAdmin.getEmail());
 		existingAdmin.setPhone_number(updatedAdmin.getPhone_number());
 		existingAdmin.setPassword(updatedAdmin.getPassword());
-		existingAdmin.setNursery(updatedAdmin.getNursery()); // Update nursery if needed
 		existingAdmin.setSuperAdmin(updatedAdmin.isSuperAdmin());
 
 		// Save the updated admin

@@ -23,7 +23,7 @@ public class TestController {
 		return ResponseEntity.ok(test);
 	}
 
-	@PostMapping
+	@PostMapping("/createTest")
 	public ResponseEntity<Test> createTest(@RequestBody Test test) {
 		Test createdTest = testService.createTest(test);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdTest);

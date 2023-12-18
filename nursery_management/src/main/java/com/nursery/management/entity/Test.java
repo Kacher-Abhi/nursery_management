@@ -21,17 +21,7 @@ public class Test {
 
 	@Column(nullable = false)
 	private String result;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "caretakerId")
-	private CareTaker careTaker;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "patientId")
-	private Patient patient;
-
+	
 	@Transient
 	private String nurseryId;
 
@@ -40,6 +30,16 @@ public class Test {
 
 	@Transient
 	private String patientId;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "caretaker_id")
+	private CareTaker caretaker;
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "patientId")
+	private Patient patient;
 
 	@JsonIgnore
 	@ManyToOne
@@ -77,11 +77,11 @@ public class Test {
 	}
 
 	public CareTaker getCareTaker() {
-		return careTaker;
+		return caretaker;
 	}
 
 	public void setCareTaker(CareTaker careTaker) {
-		this.careTaker = careTaker;
+		this.caretaker = careTaker;
 	}
 
 	public Patient getPatient() {

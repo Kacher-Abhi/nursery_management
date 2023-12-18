@@ -17,7 +17,7 @@ public class NurseryService {
 
 	@Autowired
 	private NurseryRepository nurseryRepository;
-	
+
 	@Autowired
 	private CareTakerRepository careTakerRepository;
 
@@ -32,10 +32,20 @@ public class NurseryService {
 
 	public Nursery createNursery(Nursery nursery) {
 		// You may want to perform some validation or business logic before saving
-		if (nursery.getNurseryId().length() == 6) {
-			return nurseryRepository.save(nursery);
+		if (nurseryRepository.existsById(nursery.getNurseryId())
+				|| nurseryRepository.existsByNurseryName(nursery.getNurseryName())) {
+			throw new RuntimeException("Nursery with id : " + nursery.getNurseryId() + " or Nursery with name : "
+					+ nursery.getNurseryName() + " is already present in the database ");
+		} else {
+
+			if (nursery.getNurseryId().length() == 6) {
+				return nurseryRepository.save(nursery);
+			} else {
+				throw new RuntimeException(
+						"Error creating Nursery \nReason : Expected Nursery ID lenth : 6, But entered Nursery ID length: "
+								+ nursery.getNurseryId().length());
+			}
 		}
-		return nursery;
 	}
 
 	public Nursery updateNursery(String nurseryId, Nursery updatedNursery) {
@@ -45,8 +55,9 @@ public class NurseryService {
 		existingNursery.setNurseryName(updatedNursery.getNurseryName());
 		existingNursery.setPrimaryColor(updatedNursery.getPrimaryColor());
 		existingNursery.setSecondaryColor(updatedNursery.getSecondaryColor());
-
-		// Save the updated nursery
+		existingNursery.setEmail(updatedNursery.getEmail());
+		existingNursery.setPhoneNumber(updatedNursery.getPhoneNumber());
+		
 		return nurseryRepository.save(existingNursery);
 	}
 
@@ -54,11 +65,11 @@ public class NurseryService {
 		Nursery nursery = getNurseryById(nurseryId);
 		nurseryRepository.delete(nursery);
 	}
-	
+
 	public List<CareTaker> getCaretakersByNurseryId(String nurseryId) {
-	    Nursery nursery = nurseryRepository.findById(nurseryId)
-	            .orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
-	    return careTakerRepository.findByNursery(nursery);
+		Nursery nursery = nurseryRepository.findById(nurseryId)
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+		return careTakerRepository.findByNursery(nursery);
 	}
 
 }
