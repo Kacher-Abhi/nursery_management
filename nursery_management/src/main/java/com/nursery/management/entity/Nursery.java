@@ -122,13 +122,13 @@ public class Nursery {
 		this.patient = patient;
 	}
 
-	public List<Test> getTest() {
-		return test;
-	}
-
-	public void setTest(List<Test> test) {
-		this.test = test;
-	}
+//	public List<Test> getTest() {
+//		return test;
+//	}
+//
+//	public void setTest(List<Test> test) {
+//		this.test = test;
+//	}
 
 	public byte[] getImage() {
 		return image;
@@ -138,15 +138,12 @@ public class Nursery {
 		this.image = image;
 	}
 
-	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, List<Admin> admins,
-			List<CareTaker> caretakers, String email, String phoneNumber) {
+	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, String email, String phoneNumber) {
 		super();
 		this.nurseryId = nurseryId;
 		this.nurseryName = nurseryName;
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;
-		this.admins = admins;
-		this.caretakers = caretakers;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 	}

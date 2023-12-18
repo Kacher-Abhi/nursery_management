@@ -36,7 +36,7 @@ public class CareTakerController {
 	}
 
 	@GetMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> getCaretakerById(@PathVariable String caretakerId) {
+	public ResponseEntity<CareTaker> getCaretakerById(@PathVariable Long caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
 		if (caretaker != null) {
@@ -59,7 +59,7 @@ public class CareTakerController {
 	}
 
 	@PutMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> updateCaretaker(@PathVariable String caretakerId,
+	public ResponseEntity<CareTaker> updateCaretaker(@PathVariable Long caretakerId,
 			@RequestBody CareTaker updatedCaretaker) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
@@ -73,7 +73,7 @@ public class CareTakerController {
 	}
 
 	@DeleteMapping("/{caretakerId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable String caretakerId) {
+	public ResponseEntity<Void> deleteCaretaker(@PathVariable Long caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
 		if (caretaker != null) {

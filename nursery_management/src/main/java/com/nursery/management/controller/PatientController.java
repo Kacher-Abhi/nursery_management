@@ -41,7 +41,7 @@ public class PatientController {
 	}
 
 	@GetMapping("/{patientId}")
-	public ResponseEntity<Patient> getPatientById(@PathVariable String patientId) {
+	public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {
@@ -52,7 +52,7 @@ public class PatientController {
 	}
 
 	@DeleteMapping("/{patientId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable String patientId) {
+	public ResponseEntity<Void> deleteCaretaker(@PathVariable Long patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {

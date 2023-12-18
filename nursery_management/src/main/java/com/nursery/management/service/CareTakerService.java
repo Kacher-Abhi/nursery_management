@@ -43,7 +43,7 @@ public class CareTakerService {
 		return careTakerRepository.findByNursery(nursery);
 	}
 
-	public CareTaker getCaretakerById(String caretakerId) {
+	public CareTaker getCaretakerById(Long caretakerId) {
 		return careTakerRepository.findById(caretakerId).orElse(null);
 	}
 
@@ -52,7 +52,7 @@ public class CareTakerService {
 		return careTakerRepository.save(updatedCaretaker);
 	}
 
-	public void deleteCaretaker(String caretakerId) {
+	public void deleteCaretaker(Long caretakerId) {
 		careTakerRepository.deleteById(caretakerId);
 	}
 

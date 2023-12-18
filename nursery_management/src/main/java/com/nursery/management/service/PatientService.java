@@ -44,12 +44,12 @@ public class PatientService {
 		return patientRepository.findByNursery(nursery);
 	}
 
-	public Patient getPatientById(String patientId) {
+	public Patient getPatientById(Long patientId) {
 		return patientRepository.findById(patientId)
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 	}
 
-	public void deletePatient(String patientId) {
+	public void deletePatient(Long patientId) {
 		Patient admin = getPatientById(patientId);
 		patientRepository.delete(admin);
 	}

@@ -2,25 +2,18 @@ package com.nursery.management.entity;
 
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "CareTaker")
 public class CareTaker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
-	private String caretakerId;
+	private Long caretakerId;
 
 	private String name;
 
@@ -44,14 +37,14 @@ public class CareTaker {
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-	@OneToMany(mappedBy = "caretaker", cascade = CascadeType.ALL)
-	private List<Test> test;
+//	@OneToMany(mappedBy = "caretaker", cascade = CascadeType.ALL)
+//	private List<Test> test;
 
-	public String getCaretakerId() {
+	public Long getCaretakerId() {
 		return caretakerId;
 	}
 
-	public void setCaretakerId(String caretakerId) {
+	public void setCaretakerId(Long caretakerId) {
 		this.caretakerId = caretakerId;
 	}
 
@@ -128,15 +121,15 @@ public class CareTaker {
 	}
 
 	
-	public List<Test> getTest() {
-		return test;
-	}
+//	public List<Test> getTest() {
+//		return test;
+//	}
+//
+//	public void setTest(List<Test> test) {
+//		this.test = test;
+//	}
 
-	public void setTest(List<Test> test) {
-		this.test = test;
-	}
-
-	public CareTaker(String caretakerId, String name, int age, String phoneNumber, String email, String sex,
+	public CareTaker(Long caretakerId, String name, int age, String phoneNumber, String email, String sex,
 			int yearsOfExperience, String designation, String nurseryId, Nursery nursery) {
 		super();
 		this.caretakerId = caretakerId;

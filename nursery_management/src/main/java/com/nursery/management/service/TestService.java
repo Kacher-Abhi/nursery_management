@@ -40,8 +40,9 @@ public class TestService {
 	public Test createTest(Test test) {
 		// Add any validation or business logic before saving
 		String nurseryId = test.getNurseryId();
-		String patientId = test.getPatientId();
-		String careTakerId = test.getCaretakerId();
+		Long patientId = test.getPatientId();
+        validatePatientAndNursery(patientId, nurseryId);
+//		String careTakerId = test.getCaretakerId();
 
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
@@ -49,13 +50,13 @@ public class TestService {
 		Patient patient = patientRepository.findById(patientId)
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 
-		CareTaker caretaker = careTakerRepository.findById(careTakerId)
-				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + careTakerId));
+//		CareTaker caretaker = careTakerRepository.findById(careTakerId)
+//				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + careTakerId));
 
-		if (nurseryId != null && patientId != null && careTakerId != null) {
+		if ( nurseryId != null && patientId != null ) {
 			test.setNursery(nursery);
 			test.setPatient(patient);
-			test.setCareTaker(caretaker);
+//			test.setCareTaker(caretaker);
 		}
 
 		return testRepository.save(test);
@@ -80,5 +81,13 @@ public class TestService {
 	public List<Test> getAllTests() {
 		return testRepository.findAll();
 	}
+	
+	private void validatePatientAndNursery(Long patientId, String nurseryId) {
+        boolean isPatientInNursery = patientRepository.existsByIdAndNurseryId(patientId, nurseryId);
+        if (!isPatientInNursery) {
+            throw new IllegalArgumentException("Patient with ID " + patientId +
+                    " does not belong to Nursery with ID " + nurseryId);
+        }
+    }
 
 }

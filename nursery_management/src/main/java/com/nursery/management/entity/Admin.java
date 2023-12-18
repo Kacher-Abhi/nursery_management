@@ -24,9 +24,6 @@ public class Admin {
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-//	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
-//	private List<CareTaker> caretakers;
-
 	private boolean isSuperAdmin;
 
 	public Long getAdminId() {
@@ -93,16 +90,8 @@ public class Admin {
 		this.isSuperAdmin = isSuperAdmin;
 	}
 
-//	public List<CareTaker> getCaretakers() {
-//		return caretakers;
-//	}
-//
-//	public void setCaretakers(List<CareTaker> caretakers) {
-//		this.caretakers = caretakers;
-//	}
-
 	public Admin(Long adminId, String name, String email, String phone_number, String password, String nurseryId,
-	 boolean isSuperAdmin, Nursery nursery) {
+			boolean isSuperAdmin, Nursery nursery) {
 		super();
 		this.adminId = adminId;
 		this.name = name;

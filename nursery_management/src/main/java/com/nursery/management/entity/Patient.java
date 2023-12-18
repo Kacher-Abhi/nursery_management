@@ -21,7 +21,7 @@ public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
-	private String patientId;
+	private Long patientId;
 
 	@Column(nullable = false)
 	private String name;
@@ -49,11 +49,11 @@ public class Patient {
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
 	private List<Test> test;
 
-	public String getPatientId() {
+	public Long getPatientId() {
 		return patientId;
 	}
 
-	public void setPatientId(String patientId) {
+	public void setPatientId(Long patientId) {
 		this.patientId = patientId;
 	}
 
@@ -121,7 +121,7 @@ public class Patient {
 		this.test = test;
 	}
 
-	public Patient(String patientId, String name, int age, String phoneNumber, String email, String sex,
+	public Patient(Long patientId, String name, int age, String phoneNumber, String email, String sex,
 			String nurseryId) {
 		super();
 		this.patientId = patientId;

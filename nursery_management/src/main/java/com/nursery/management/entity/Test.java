@@ -24,17 +24,17 @@ public class Test {
 	
 	@Transient
 	private String nurseryId;
+//
+//	@Transient
+//	private String caretakerId;
 
 	@Transient
-	private String caretakerId;
+	private Long patientId;
 
-	@Transient
-	private String patientId;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "caretaker_id")
-	private CareTaker caretaker;
+//	@JsonIgnore
+//	@ManyToOne
+//	@JoinColumn(name = "caretaker_id")
+//	private CareTaker caretaker;
 
 	@JsonIgnore
 	@ManyToOne
@@ -76,13 +76,13 @@ public class Test {
 		this.result = result;
 	}
 
-	public CareTaker getCareTaker() {
-		return caretaker;
-	}
-
-	public void setCareTaker(CareTaker careTaker) {
-		this.caretaker = careTaker;
-	}
+//	public CareTaker getCareTaker() {
+//		return caretaker;
+//	}
+//
+//	public void setCareTaker(CareTaker careTaker) {
+//		this.caretaker = careTaker;
+//	}
 
 	public Patient getPatient() {
 		return patient;
@@ -100,19 +100,19 @@ public class Test {
 		this.nurseryId = nurseryId;
 	}
 
-	public String getCaretakerId() {
-		return caretakerId;
-	}
+//	public String getCaretakerId() {
+//		return caretakerId;
+//	}
+//
+//	public void setCaretakerId(String caretakerId) {
+//		this.caretakerId = caretakerId;
+//	}
 
-	public void setCaretakerId(String caretakerId) {
-		this.caretakerId = caretakerId;
-	}
-
-	public String getPatientId() {
+	public Long getPatientId() {
 		return patientId;
 	}
 
-	public void setPatientId(String patientId) {
+	public void setPatientId(Long patientId) {
 		this.patientId = patientId;
 	}
 
@@ -140,15 +140,16 @@ public class Test {
 		this.testTakenTime = testTakenTime;
 	}
 
-	public Test(Long testId, String testName, String result, String nurseryId, LocalDate testTakenDate,
-			LocalTime testTakenTime) {
+	public Test(Long testId, String testName, String result, LocalDate testTakenDate,
+			LocalTime testTakenTime, Long patientId, String nurseryId) {
 		super();
 		this.testId = testId;
 		this.testName = testName;
 		this.result = result;
-		this.nurseryId = nurseryId;
 		this.testTakenDate = testTakenDate;
 		this.testTakenTime = testTakenTime;
+		this.patientId = patientId;
+		this.nurseryId = nurseryId;
 	}
 
 	public Test() {
