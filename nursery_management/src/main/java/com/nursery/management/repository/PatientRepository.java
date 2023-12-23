@@ -13,6 +13,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
 	List<Patient> findByNursery(Nursery nursery);
 
+	Patient findByEmail(String email);
+
 	@Query("SELECT COUNT(p) > 0 FROM Patient p WHERE p.id = :patientId AND p.nursery.id = :nurseryId")
 	boolean existsByIdAndNurseryId(@Param("patientId") Long patientId, @Param("nurseryId") String nurseryId);
 }

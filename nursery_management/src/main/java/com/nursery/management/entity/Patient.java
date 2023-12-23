@@ -1,6 +1,10 @@
 package com.nursery.management.entity;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,7 +20,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
-public class Patient {
+public class Patient implements UserDetails {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +30,10 @@ public class Patient {
 	private Long patientId;
 
 	@Column(nullable = false)
-	private String name;
+	private String firstName;
+
+	@Column(nullable = true)
+	private String lastName;
 
 	@Column(nullable = false)
 	private int age;
@@ -57,12 +66,20 @@ public class Patient {
 		this.patientId = patientId;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public int getAge() {
@@ -121,11 +138,12 @@ public class Patient {
 		this.test = test;
 	}
 
-	public Patient(Long patientId, String name, int age, String phoneNumber, String email, String sex,
-			String nurseryId) {
+	public Patient(Long patientId, String firstName, String lastName, int age, String phoneNumber, String email,
+			String sex, String nurseryId) {
 		super();
 		this.patientId = patientId;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
@@ -136,6 +154,48 @@ public class Patient {
 	public Patient() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

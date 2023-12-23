@@ -3,6 +3,7 @@ package com.nursery.management.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Admin;
@@ -47,6 +48,8 @@ public class AdminService {
 		if (nurseryId != null) {
 			admin.setNursery(nursery);
 		}
+		
+		admin.setPassword(BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt(4)));
 
 		return adminRepository.save(admin);
 	}
@@ -58,8 +61,8 @@ public class AdminService {
 	public Admin updateAdmin(Long adminId, Admin updatedAdmin) {
 		Admin existingAdmin = getAdminById(adminId);
 
-		// Update the fields you want to allow updating
-		existingAdmin.setName(updatedAdmin.getName());
+		existingAdmin.setFirstName(updatedAdmin.getFirstName());
+		existingAdmin.setLastName(updatedAdmin.getLastName());
 		existingAdmin.setEmail(updatedAdmin.getEmail());
 		existingAdmin.setPhone_number(updatedAdmin.getPhone_number());
 		existingAdmin.setPassword(updatedAdmin.getPassword());
@@ -78,4 +81,6 @@ public class AdminService {
 		return adminRepository.findById(adminId)
 				.orElseThrow(() -> new EntityNotFoundException("Admin not found with id: " + adminId));
 	}
+	
+	
 }
