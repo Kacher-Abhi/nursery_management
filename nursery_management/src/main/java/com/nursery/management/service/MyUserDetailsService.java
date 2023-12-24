@@ -23,6 +23,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Admin admin = adminRepository.findByEmail(username);
 		if (admin != null) {
+			System.out.println("Admin found with email " + username);
 			return admin;
 		}
 

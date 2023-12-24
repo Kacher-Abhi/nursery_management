@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,27 +43,44 @@ public class SecurityConfig {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
+//	@SuppressWarnings("removal")
+//	protected void configure(HttpSecurity http) throws Exception {
+//		// TODO Auto-generated method stub
+//		http.authorizeRequests()
+//		.requestMatchers("/caretakers/**").hasRole("ADMIN")
+//		.requestMatchers("/admins/**").permitAll()
+//		.requestMatchers(HttpMethod.POST,"/admins").permitAll()
+//		.requestMatchers(HttpMethod.POST,"/caretakers").hasAnyRole("ADMIN","SUPERADMIN")
+//
+//
+////		.requestMatchers("/expenses/**").hasAnyRole("OWNER","CASHIER")
+////		.requestMatchers("/billing/**").hasAnyRole("OWNER","CASHIER")
+////		.requestMatchers("/item/**").hasAnyRole("ADMIN","OWNER")// for viewing reports and editing menu items 
+////		.requestMatchers(HttpMethod.POST,"/items").hasAnyRole("ADMIN","OWNER")
+////		.requestMatchers("/admin/**").hasAnyRole("ADMIN","OWNER")// for adding new employees
+////		.requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN","OWNER")
+////		.requestMatchers("/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")//for viewing order Status
+////		.requestMatchers(HttpMethod.POST,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
+////		.requestMatchers(HttpMethod.PUT,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
+////		.requestMatchers("/customer/**").hasAnyRole("OWNER","CASHIER")// for adding new customers
+////		.requestMatchers(HttpMethod.POST,"/cust").hasAnyRole("OWNER","CASHIER")
+//		.requestMatchers("/").permitAll()
+//		.and().formLogin();
+//		http.csrf().disable();  
+//	}
+
+	@Bean
 	@SuppressWarnings("removal")
-	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.requestMatchers("/reports/**").hasRole("OWNER")
-		.requestMatchers("/expenses/**").hasAnyRole("OWNER","CASHIER")
-		.requestMatchers("/billing/**").hasAnyRole("OWNER","CASHIER")
-		.requestMatchers(HttpMethod.POST,"/reports").hasAnyRole("ADMIN","OWNER")
-		.requestMatchers("/item/**").hasAnyRole("ADMIN","OWNER")// for viewing reports and editing menu items 
-		.requestMatchers(HttpMethod.POST,"/items").hasAnyRole("ADMIN","OWNER")
-		.requestMatchers("/admin/**").hasAnyRole("ADMIN","OWNER")// for adding new employees
-		.requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN","OWNER")
-		.requestMatchers("/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")//for viewing order Status
-		.requestMatchers(HttpMethod.POST,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
-		.requestMatchers(HttpMethod.PUT,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
-		.requestMatchers("/customer/**").hasAnyRole("OWNER","CASHIER")// for adding new customers
-		.requestMatchers(HttpMethod.POST,"/cust").hasAnyRole("OWNER","CASHIER")
-		.requestMatchers("/").permitAll()
-		.and().formLogin();
-		http.csrf().disable();  
+				.requestMatchers("/caretakers/**").hasRole("ADMIN")
+				.requestMatchers("/admins/**").hasAnyRole("ADMIN", "ROLE_SUPER_ADMIN")
+				.requestMatchers(HttpMethod.POST,"/admins/**").hasAnyRole("ADMIN","ROLE_SUPER_ADMIN")
+				.requestMatchers(HttpMethod.POST,"/caretakers").hasAnyRole("ADMIN","SUPERADMIN");
+		http.csrf().disable();
+		return http.build();
 	}
+
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");

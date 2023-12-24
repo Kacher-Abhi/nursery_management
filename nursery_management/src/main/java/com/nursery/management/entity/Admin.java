@@ -1,7 +1,9 @@
 package com.nursery.management.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +38,8 @@ public class Admin implements UserDetails {
 	@Column(nullable = false)
 	private String password;
 
+	private List<GrantedAuthority> authorities;
+
 	@Transient
 	private String nurseryId;
 
@@ -62,7 +66,6 @@ public class Admin implements UserDetails {
 		this.firstName = firstName;
 	}
 
-	
 	public String getLastName() {
 		return lastName;
 	}
@@ -70,6 +73,7 @@ public class Admin implements UserDetails {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -118,8 +122,12 @@ public class Admin implements UserDetails {
 		this.isSuperAdmin = isSuperAdmin;
 	}
 
-	public Admin(Long adminId, String firstName, String lastName, String email, String phone_number, String password, String nurseryId,
-			boolean isSuperAdmin, Nursery nursery) {
+	public void setAuthorities(List<GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
+	public Admin(Long adminId, String firstName, String lastName, String email, String phone_number, String password,
+			String nurseryId, boolean isSuperAdmin, Nursery nursery, List<GrantedAuthority> authorities) {
 		super();
 		this.adminId = adminId;
 		this.firstName = firstName;
@@ -130,6 +138,7 @@ public class Admin implements UserDetails {
 		this.nurseryId = nurseryId;
 		this.isSuperAdmin = isSuperAdmin;
 		this.nursery = nursery;
+		this.authorities = authorities;
 	}
 
 	public Admin() {
@@ -139,11 +148,10 @@ public class Admin implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<GrantedAuthority> authorities = new HashSet<>();
-		authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()));
+		this.authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()));
 
 		if (isSuperAdmin) {
-			authorities.add(new SimpleGrantedAuthority(Role.ROLE_SUPER_ADMIN.name()));
+			this.authorities.add(new SimpleGrantedAuthority(Role.ROLE_SUPER_ADMIN.name()));
 		}
 
 		return authorities;
@@ -152,31 +160,31 @@ public class Admin implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return email;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }
