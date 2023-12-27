@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
+import com.nursery.management.entity.Role;
 import com.nursery.management.repository.CareTakerRepository;
 import com.nursery.management.repository.NurseryRepository;
 
@@ -29,6 +30,7 @@ public class CareTakerService {
 
 		if (nurseryId != null) {
 			caretaker.setNursery(nursery);
+			caretaker.setAuthorities(Role.ROLE_CARETAKER.name());
 		} else {
 			throw new RuntimeException("Nursery Id should not be null");
 		}

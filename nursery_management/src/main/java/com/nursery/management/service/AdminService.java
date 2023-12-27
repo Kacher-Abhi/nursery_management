@@ -51,8 +51,8 @@ public class AdminService {
 		if (nurseryId != null) {
 			admin.setNursery(nursery);
 		}
-		if(admin.isSuperAdmin()) admin.setRole(Role.ROLE_ROLE_SUPER_ADMIN.name());
-		else admin.setRole(Role.ROLE_ROLE_ADMIN.name());
+		if(admin.isSuperAdmin()) admin.setRole(Role.ROLE_SUPER_ADMIN.name());
+		else admin.setRole(Role.ROLE_ADMIN.name());
 		admin.setPassword(BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt(4)));
 
 		return adminRepository.save(admin);

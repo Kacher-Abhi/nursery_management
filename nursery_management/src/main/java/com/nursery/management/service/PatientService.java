@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Patient;
+import com.nursery.management.entity.Role;
 import com.nursery.management.repository.NurseryRepository;
 import com.nursery.management.repository.PatientRepository;
 
@@ -32,6 +33,7 @@ public class PatientService {
 
 		if (nurseryId != null) {
 			patient.setNursery(nursery);
+			patient.setRole(Role.ROLE_PATIENT.name());
 		}
 
 		return patientRepository.save(patient);

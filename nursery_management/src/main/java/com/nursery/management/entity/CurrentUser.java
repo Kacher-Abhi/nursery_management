@@ -24,7 +24,7 @@ public class CurrentUser implements UserDetails{
 		this.id = user.getAdminId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
 	}
 	public CurrentUser(Patient user) {
 		this.id = user.getPatientId();
