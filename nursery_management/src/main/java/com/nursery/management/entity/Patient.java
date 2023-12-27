@@ -20,7 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
-public class Patient implements UserDetails {
+public class Patient{
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +46,8 @@ public class Patient implements UserDetails {
 
 	@Column(nullable = false)
 	private String sex;
+	private String role;
+	private String passowrd;
 
 	@Transient
 	private String nurseryId;
@@ -139,7 +141,7 @@ public class Patient implements UserDetails {
 	}
 
 	public Patient(Long patientId, String firstName, String lastName, int age, String phoneNumber, String email,
-			String sex, String nurseryId) {
+			String sex, String nurseryId, String role, String passowrd) {
 		super();
 		this.patientId = patientId;
 		this.firstName = firstName;
@@ -149,6 +151,24 @@ public class Patient implements UserDetails {
 		this.email = email;
 		this.sex = sex;
 		this.nurseryId = nurseryId;
+		this.role = role;
+		this.passowrd = passowrd;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getPassowrd() {
+		return passowrd;
+	}
+
+	public void setPassowrd(String passowrd) {
+		this.passowrd = passowrd;
 	}
 
 	public Patient() {
@@ -156,46 +176,5 @@ public class Patient implements UserDetails {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

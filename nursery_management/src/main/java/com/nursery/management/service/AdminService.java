@@ -1,13 +1,16 @@
 package com.nursery.management.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Admin;
 import com.nursery.management.entity.Nursery;
+import com.nursery.management.entity.Role;
 import com.nursery.management.repository.AdminRepository;
 import com.nursery.management.repository.NurseryRepository;
 
@@ -48,7 +51,8 @@ public class AdminService {
 		if (nurseryId != null) {
 			admin.setNursery(nursery);
 		}
-		
+		if(admin.isSuperAdmin()) admin.setRole(Role.ROLE_ROLE_SUPER_ADMIN.name());
+		else admin.setRole(Role.ROLE_ROLE_ADMIN.name());
 		admin.setPassword(BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt(4)));
 
 		return adminRepository.save(admin);

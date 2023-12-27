@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Admin;
+import com.nursery.management.entity.CurrentUser;
 import com.nursery.management.entity.Patient;
 import com.nursery.management.repository.*;
 
@@ -24,12 +25,12 @@ public class MyUserDetailsService implements UserDetailsService {
 		Admin admin = adminRepository.findByEmail(username);
 		if (admin != null) {
 			System.out.println("Admin found with email " + username);
-			return admin;
+			return new CurrentUser(admin);
 		}
 
 		Patient patient = patientRepository.findByEmail(username);
 		if (patient != null) {
-			return patient;
+			return new CurrentUser(patient);
 		}
 
 		throw new UsernameNotFoundException("User not found with username: " + username);

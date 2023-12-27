@@ -24,10 +24,13 @@ public class CareTaker {
 	private String email;
 
 	private String sex;
+	
+	private String password;
 
 	private int yearsOfExperience;
 
 	private String designation;
+	private String role;
 
 	@Transient
 	private String nurseryId;
@@ -70,6 +73,20 @@ public class CareTaker {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public String getAuthorities() {
+		return role;
+	}
+
+	public void setAuthorities(String authorities) {
+		this.role = authorities;
+	}
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.phoneNumber = password;
 	}
 
 	public String getEmail() {

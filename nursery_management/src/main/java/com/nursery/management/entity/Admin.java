@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class Admin implements UserDetails {
+public class Admin {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class Admin implements UserDetails {
 	@Column(nullable = false)
 	private String password;
 
-	private List<GrantedAuthority> authorities;
+	private String role;
 
 	@Transient
 	private String nurseryId;
@@ -122,8 +122,11 @@ public class Admin implements UserDetails {
 		this.isSuperAdmin = isSuperAdmin;
 	}
 
-	public void setAuthorities(List<GrantedAuthority> authorities) {
-		this.authorities = authorities;
+	public void setRole(String authorities) {
+		this.role = authorities;
+	}
+	public String getRole() {
+		return role;
 	}
 
 	public Admin(Long adminId, String firstName, String lastName, String email, String phone_number, String password,
@@ -138,53 +141,10 @@ public class Admin implements UserDetails {
 		this.nurseryId = nurseryId;
 		this.isSuperAdmin = isSuperAdmin;
 		this.nursery = nursery;
-		this.authorities = authorities;
 	}
 
 	public Admin() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		this.authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()));
-
-		if (isSuperAdmin) {
-			this.authorities.add(new SimpleGrantedAuthority(Role.ROLE_SUPER_ADMIN.name()));
-		}
-
-		return authorities;
-	}
-
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return email;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
 }

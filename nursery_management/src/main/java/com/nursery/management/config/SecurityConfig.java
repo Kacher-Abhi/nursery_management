@@ -8,16 +8,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -72,17 +69,14 @@ public class SecurityConfig {
 	@Bean
 	@SuppressWarnings("removal")
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.requestMatchers("/caretakers/**").hasRole("ADMIN")
-				.requestMatchers("/admins/**").hasAnyRole("ADMIN", "ROLE_SUPER_ADMIN")
-				.requestMatchers(HttpMethod.POST,"/admins/**").hasAnyRole("ADMIN","ROLE_SUPER_ADMIN")
-				.requestMatchers(HttpMethod.POST,"/caretakers").hasAnyRole("ADMIN","SUPERADMIN");
+        http.authorizeRequests(requests -> requests
+                .requestMatchers("/caretakers/**").hasAnyRole("ADMIN")
+                .requestMatchers("/admins/**").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/admins/**").hasAnyRole("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.POST, "/caretakers").hasAnyRole("ROLE_ADMIN"));;
 		http.csrf().disable();
+		http.cors().disable();
+		http.formLogin();
 		return http.build();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");
 	}
 }
