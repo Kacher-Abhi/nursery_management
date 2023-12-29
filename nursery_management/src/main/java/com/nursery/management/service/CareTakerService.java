@@ -38,6 +38,15 @@ public class CareTakerService {
 		return careTakerRepository.save(caretaker);
 	}
 
+	public void addRating(Long caretakerId, int newRating) {
+		CareTaker caretaker = careTakerRepository.findById(caretakerId)
+				.orElseThrow(() -> new EntityNotFoundException("CareTaker not found with id: " + caretakerId));
+
+		caretaker.addRating(newRating);
+
+		careTakerRepository.save(caretaker);
+	}
+
 	public List<CareTaker> getCaretakersByNurseryId(String nurseryId) {
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));

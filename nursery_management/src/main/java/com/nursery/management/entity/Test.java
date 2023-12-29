@@ -21,25 +21,29 @@ public class Test {
 
 	@Column(nullable = false)
 	private String result;
-	
+
 	@Transient
 	private String nurseryId;
-//
-//	@Transient
-//	private String caretakerId;
+
+	@Transient
+	private Long caretakerId;
 
 	@Transient
 	private Long patientId;
 
-//	@JsonIgnore
-//	@ManyToOne
-//	@JoinColumn(name = "caretaker_id")
-//	private CareTaker caretaker;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "caretaker_id")
+	private CareTaker caretaker;
 
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "patientId")
 	private Patient patient;
+
+	private String careTakerEmail;
+
+	private String patientEmail;
 
 	@JsonIgnore
 	@ManyToOne
@@ -76,13 +80,13 @@ public class Test {
 		this.result = result;
 	}
 
-//	public CareTaker getCareTaker() {
-//		return caretaker;
-//	}
-//
-//	public void setCareTaker(CareTaker careTaker) {
-//		this.caretaker = careTaker;
-//	}
+	public CareTaker getCareTaker() {
+		return caretaker;
+	}
+
+	public void setCareTaker(CareTaker careTaker) {
+		this.caretaker = careTaker;
+	}
 
 	public Patient getPatient() {
 		return patient;
@@ -100,13 +104,13 @@ public class Test {
 		this.nurseryId = nurseryId;
 	}
 
-//	public String getCaretakerId() {
-//		return caretakerId;
-//	}
-//
-//	public void setCaretakerId(String caretakerId) {
-//		this.caretakerId = caretakerId;
-//	}
+	public Long getCaretakerId() {
+		return caretakerId;
+	}
+
+	public void setCaretakerId(Long caretakerId) {
+		this.caretakerId = caretakerId;
+	}
 
 	public Long getPatientId() {
 		return patientId;
@@ -140,8 +144,32 @@ public class Test {
 		this.testTakenTime = testTakenTime;
 	}
 
-	public Test(Long testId, String testName, String result, LocalDate testTakenDate,
-			LocalTime testTakenTime, Long patientId, String nurseryId) {
+	public CareTaker getCaretaker() {
+		return caretaker;
+	}
+
+	public void setCaretaker(CareTaker caretaker) {
+		this.caretaker = caretaker;
+	}
+
+	public String getCareTakerEmail() {
+		return careTakerEmail;
+	}
+
+	public void setCareTakerEmail(String careTakerEmail) {
+		this.careTakerEmail = careTakerEmail;
+	}
+
+	public String getPatientEmail() {
+		return patientEmail;
+	}
+
+	public void setPatientEmail(String patientEmail) {
+		this.patientEmail = patientEmail;
+	}
+
+	public Test(Long testId, String testName, String result, LocalDate testTakenDate, LocalTime testTakenTime,
+			Long patientId, String nurseryId, Long caretakerId, String careTakerEmail, String patientEmail) {
 		super();
 		this.testId = testId;
 		this.testName = testName;
@@ -150,13 +178,15 @@ public class Test {
 		this.testTakenTime = testTakenTime;
 		this.patientId = patientId;
 		this.nurseryId = nurseryId;
+		this.caretakerId = caretakerId;
+		this.careTakerEmail = careTakerEmail;
+		this.patientEmail = patientEmail;
+		
 	}
 
 	public Test() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 }
