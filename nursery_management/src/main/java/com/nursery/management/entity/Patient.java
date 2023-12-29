@@ -20,7 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
-public class Patient{
+public class Patient {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,24 +29,20 @@ public class Patient{
 	@Column
 	private Long patientId;
 
-	@Column(nullable = false)
 	private String firstName;
 
-	@Column(nullable = true)
 	private String lastName;
 
-	@Column(nullable = false)
 	private int age;
 
-	@Column(nullable = false)
 	private String phoneNumber;
 
-	@Column(nullable = false)
 	private String email;
 
-	@Column(nullable = false)
 	private String sex;
+
 	private String role;
+
 	private String passowrd;
 
 	@Transient
@@ -56,6 +52,12 @@ public class Patient{
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
+
+	@ManyToOne
+	@JoinColumn(name = "caretaker_id")
+	private CareTaker caretaker;
+
+	private int rating;
 
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
 	private List<Test> test;
@@ -140,8 +142,24 @@ public class Patient{
 		this.test = test;
 	}
 
+	public CareTaker getCaretaker() {
+		return caretaker;
+	}
+
+	public void setCaretaker(CareTaker caretaker) {
+		this.caretaker = caretaker;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
 	public Patient(Long patientId, String firstName, String lastName, int age, String phoneNumber, String email,
-			String sex, String nurseryId, String role, String passowrd) {
+			String sex, String nurseryId, String role, String passowrd, CareTaker careTaker, int rating) {
 		super();
 		this.patientId = patientId;
 		this.firstName = firstName;
@@ -153,6 +171,8 @@ public class Patient{
 		this.nurseryId = nurseryId;
 		this.role = role;
 		this.passowrd = passowrd;
+		this.caretaker = careTaker;
+		this.rating = rating;
 	}
 
 	public String getRole() {
@@ -175,6 +195,5 @@ public class Patient{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 
 }

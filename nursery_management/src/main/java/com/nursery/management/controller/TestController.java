@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.nursery.management.entity.Admin;
+import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Test;
 import com.nursery.management.service.TestService;
 
@@ -45,6 +47,12 @@ public class TestController {
 	public ResponseEntity<List<Test>> getAllTests() {
 		List<Test> tests = testService.getAllTests();
 		return ResponseEntity.ok(tests);
+	}
+	
+	@GetMapping("/byNursery/{nurseryId}/{patientEmail}")
+	public List<Test> getTestByPateintEmail(@PathVariable String nurseryId, @PathVariable String patientEmail) {
+		List<Test> test = testService.getTestByPateintEmail(patientEmail, nurseryId);
+		return test;
 	}
 
 }

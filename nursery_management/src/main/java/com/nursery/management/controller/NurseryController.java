@@ -30,7 +30,7 @@ import com.nursery.management.service.NurseryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/nurseries")
 public class NurseryController {
