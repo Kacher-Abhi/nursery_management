@@ -16,10 +16,13 @@ import jakarta.persistence.EntityNotFoundException;
 public class NurseryService {
 
 	@Autowired
-	private NurseryRepository nurseryRepository;
+	public NurseryRepository nurseryRepository;
 
 	@Autowired
 	private CareTakerRepository careTakerRepository;
+	
+	@Autowired
+	private JwtSecService jwtSecService;
 
 	public List<Nursery> getAllNurseries() {
 		return nurseryRepository.findAll();
@@ -39,7 +42,9 @@ public class NurseryService {
 		} else {
 
 			if (nursery.getNurseryId().length() == 6) {
-				return nurseryRepository.save(nursery);
+				Nursery savedNursery = nurseryRepository.save(nursery);
+				jwtSecService.addNew(nursery.getNurseryId());
+				return savedNursery;
 			} else {
 				throw new RuntimeException(
 						"Error creating Nursery \nReason : Expected Nursery ID lenth : 6, But entered Nursery ID length: "
