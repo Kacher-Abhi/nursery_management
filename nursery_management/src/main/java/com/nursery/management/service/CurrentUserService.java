@@ -26,11 +26,11 @@ public class CurrentUserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Admin admin = adminRepository.findByEmail(username);
-		if (admin != null) {
-			System.out.println("Admin found with email " + username);
-			return new CurrentUser(admin);
-		}
+//		Admin admin = adminRepository.findByEmail(username);
+//		if (admin != null) {
+//			System.out.println("Admin found with email " + username);
+//			return new CurrentUser(admin);
+//		}
 
 		Patient patient = patientRepository.findByEmail(username);
 		if (patient != null) {

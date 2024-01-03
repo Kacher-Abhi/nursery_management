@@ -40,9 +40,9 @@ public class TestService {
 	public Test createTest(Test test) {
 		// Add any validation or business logic before saving
 		String nurseryId = test.getNurseryId();
-		Long patientId = test.getPatientId();
-//        validatePatientAndNursery(patientId, nurseryId);
-		Long careTakerId = test.getCaretakerId();
+		String patientId = test.getPatientId();
+
+		String careTakerId = test.getCaretakerId();
 
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
@@ -51,14 +51,12 @@ public class TestService {
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 
 		CareTaker caretaker = careTakerRepository.findById(careTakerId)
-				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + careTakerId));
+				.orElseThrow(() -> new EntityNotFoundException("CareTaker not found with id: " + careTakerId));
 
-		if (nurseryId != null && patientId != null && careTakerId != null) {
+		if (nurseryId != null) {
 			test.setNursery(nursery);
 			test.setPatient(patient);
-			test.setCareTaker(caretaker);
-			test.setCareTakerEmail(caretaker.getEmail());
-			test.setPatientEmail(patient.getEmail());
+			test.setCaretaker(caretaker);
 
 		}
 
@@ -85,18 +83,17 @@ public class TestService {
 		return testRepository.findAll();
 	}
 
-	public List<Test> getTestByPateintEmail(String patientEmail, String nurseryId) {
-		// TODO Auto-generated method stub
-		List<Test> findByPatientEmail = testRepository.getTestByPateintEmail(patientEmail, nurseryId);
-		return findByPatientEmail;
-	}
+    public List<Test> getTestsForPatientInNursery(String patientId, String nurseryId) {
+        return testRepository.findByPatientIdAndNurseryId(patientId, nurseryId);
+    }
 
-//	private void validatePatientAndNursery(Long patientId, String nurseryId) {
-//        boolean isPatientInNursery = patientRepository.existsByIdAndNurseryId(patientId, nurseryId);
-//        if (!isPatientInNursery) {
-//            throw new IllegalArgumentException("Patient with ID " + patientId +
-//                    " does not belong to Nursery with ID " + nurseryId);
-//        }
-//    }
+    public List<Test> getTestsForCareTakerInNursery(String careTakerEmail, String nurseryId) {
+        return testRepository.findByCareTakerIdAndNurseryId(careTakerEmail, nurseryId);
+    }
+    
+    public List<Test> getTestsForCareTakerAndPatient(String careTakerEmail, String nurseryId, String patientEmail) {
+        return testRepository.findByCareTakerIdAndNurseryIdAndPatientId(careTakerEmail, nurseryId, patientEmail);
+    }
+    
 
 }

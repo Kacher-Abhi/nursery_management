@@ -11,34 +11,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Column;
 import jakarta.persistence.Transient;
 
-public class CurrentUser implements UserDetails{
-	private long id;
+public class CurrentUser implements UserDetails {
+	private static final long serialVersionUID = 1L;
+	private String id;
 	private String email;
 	private String password;
 	private boolean active = true;
 	private List<GrantedAuthority> role;
 
-
-
 	public CurrentUser(Admin user) {
 		this.id = user.getAdminId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 	}
+
 	public CurrentUser(Patient user) {
 		this.id = user.getPatientId();
 		this.email = user.getEmail();
-		this.password = user.getPassowrd();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+		this.password = user.getPassword();
+		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 	}
+
 	public CurrentUser(CareTaker user) {
 		this.id = user.getCaretakerId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getAuthorities()));
+		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + user.getAuthorities()));
 	}
-	
+
 	public CurrentUser() {
 
 	}

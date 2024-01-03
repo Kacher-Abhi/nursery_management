@@ -1,6 +1,7 @@
 package com.nursery.management.entity;
 
 import java.util.List;
+import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,9 +11,8 @@ import jakarta.persistence.*;
 @Table(name = "CareTaker")
 public class CareTaker {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true)
-	private Long caretakerId;
+	@Column(name = "caretaker_id", unique = true)
+	private String caretakerId;
 
 	private String name;
 
@@ -32,10 +32,10 @@ public class CareTaker {
 
 	private String role;
 
-	private int numberOfRatings;
-
-	private int totalRating;
-
+//	private int numberOfRatings;
+//
+//	private int totalRating;
+//
 	private double averageRating;
 
 	@Transient
@@ -46,14 +46,17 @@ public class CareTaker {
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-	@OneToMany(mappedBy = "caretaker", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "caretaker")
+	private List<Rating> ratings;
+
+	@OneToMany(mappedBy = "caretaker")
 	private List<Test> test;
 
-	public Long getCaretakerId() {
+	public String getCaretakerId() {
 		return caretakerId;
 	}
 
-	public void setCaretakerId(Long caretakerId) {
+	public void setCaretakerId(String caretakerId) {
 		this.caretakerId = caretakerId;
 	}
 
@@ -144,19 +147,14 @@ public class CareTaker {
 	public void setNursery(Nursery nursery) {
 		this.nursery = nursery;
 	}
-	public void addRating(int newRating) {
-        // Validate the rating
-        if (newRating < 1 || newRating > 5) {
-            throw new IllegalArgumentException("Rating should be between 1 and 5");
-        }
 
-        // Update totalRating and numberOfRatings
-        totalRating += newRating;
-        numberOfRatings++;
+	public List<Rating> getRatings() {
+		return ratings;
+	}
 
-        // Recalculate the averageRating
-        averageRating = (double) totalRating / numberOfRatings;
-    }
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
 
 	public List<Test> getTest() {
 		return test;
@@ -166,22 +164,36 @@ public class CareTaker {
 		this.test = test;
 	}
 
-	public int getNumberOfRatings() {
-		return numberOfRatings;
-	}
-
-	public void setNumberOfRatings(int numberOfRatings) {
-		this.numberOfRatings = numberOfRatings;
-	}
-
-	public int getTotalRating() {
-		return totalRating;
-	}
-
-	public void setTotalRating(int totalRating) {
-		this.totalRating = totalRating;
-	}
-
+//	public void addRating(int newRating) {
+//		// Validate the rating
+//		if (newRating < 1 || newRating > 5) {
+//			throw new IllegalArgumentException("Rating should be between 1 and 5");
+//		}
+//
+//		// Update totalRating and numberOfRatings
+//		totalRating += newRating;
+//		numberOfRatings++;
+//
+//		// Recalculate the averageRating
+//		averageRating = (double) totalRating / numberOfRatings;
+//	}
+//
+//	public int getNumberOfRatings() {
+//		return numberOfRatings;
+//	}
+//
+//	public void setNumberOfRatings(int numberOfRatings) {
+//		this.numberOfRatings = numberOfRatings;
+//	}
+//
+//	public int getTotalRating() {
+//		return totalRating;
+//	}
+//
+//	public void setTotalRating(int totalRating) {
+//		this.totalRating = totalRating;
+//	}
+//
 	public double getAverageRating() {
 		return averageRating;
 	}
@@ -190,28 +202,40 @@ public class CareTaker {
 		this.averageRating = averageRating;
 	}
 
-	public CareTaker(Long caretakerId, String name, int age, String phoneNumber, String email, String sex,
-			int yearsOfExperience, String designation, String nurseryId, Nursery nursery, int numberOfRatings,
-			int totalRating, double averageRating) {
+	public CareTaker(String caretakerId, String name, int age, String phoneNumber, String email, String password,
+			String sex, int yearsOfExperience, String designation, String nurseryId, Nursery nursery,
+			double averageRating) {
 		super();
 		this.caretakerId = caretakerId;
 		this.name = name;
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.password = password;
 		this.sex = sex;
 		this.yearsOfExperience = yearsOfExperience;
 		this.designation = designation;
 		this.nurseryId = nurseryId;
 		this.nursery = nursery;
-		this.numberOfRatings = numberOfRatings;
-		this.totalRating = totalRating;
+//		this.numberOfRatings = numberOfRatings;
+//		this.totalRating = totalRating;
 		this.averageRating = averageRating;
 	}
 
 	public CareTaker() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.caretakerId = generateRandomId();
+	}
+
+	private String generateRandomId() {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		StringBuilder randomId = new StringBuilder();
+		Random random = new Random();
+
+		for (int i = 0; i < 6; i++) {
+			randomId.append(characters.charAt(random.nextInt(characters.length())));
+		}
+
+		return randomId.toString();
 	}
 
 }

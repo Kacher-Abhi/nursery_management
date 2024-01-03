@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nursery.management.entity.CareTaker;
 import com.nursery.management.service.CareTakerService;
 
-@CrossOrigin(origins  = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/caretakers")
 public class CareTakerController {
@@ -38,7 +38,7 @@ public class CareTakerController {
 	}
 
 	@GetMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> getCaretakerById(@PathVariable Long caretakerId) {
+	public ResponseEntity<CareTaker> getCaretakerById(@PathVariable String caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
 		if (caretaker != null) {
@@ -61,7 +61,7 @@ public class CareTakerController {
 	}
 
 	@PutMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> updateCaretaker(@PathVariable Long caretakerId,
+	public ResponseEntity<CareTaker> updateCaretaker(@PathVariable String caretakerId,
 			@RequestBody CareTaker updatedCaretaker) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
@@ -74,8 +74,20 @@ public class CareTakerController {
 		}
 	}
 
+	@PutMapping("/rate/{caretakerId}/{nurseryId}")
+	public ResponseEntity<CareTaker> updateAverage(@PathVariable String caretakerId, @PathVariable String nurseryId) {
+		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
+
+		if (caretaker != null) {
+			CareTaker savedCaretaker = caretakerService.updateAverageRating(caretakerId, nurseryId);
+			return ResponseEntity.ok(savedCaretaker);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
 	@DeleteMapping("/{caretakerId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable Long caretakerId) {
+	public ResponseEntity<Void> deleteCaretaker(@PathVariable String caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
 		if (caretaker != null) {
@@ -85,4 +97,5 @@ public class CareTakerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
+
 }

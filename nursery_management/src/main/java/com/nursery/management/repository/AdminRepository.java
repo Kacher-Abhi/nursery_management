@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.nursery.management.entity.Admin;
 import com.nursery.management.entity.Nursery;
 
-public interface AdminRepository extends JpaRepository<Admin, Long> {
+public interface AdminRepository extends JpaRepository<Admin, String> {
     List<Admin> findByNursery(Nursery nursery);
 
 	Admin findByEmail(String email);

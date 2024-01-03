@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
+import com.nursery.management.entity.Rating;
 import com.nursery.management.entity.Role;
 import com.nursery.management.repository.CareTakerRepository;
 import com.nursery.management.repository.NurseryRepository;
+import com.nursery.management.repository.RatingRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -21,6 +23,9 @@ public class CareTakerService {
 
 	@Autowired
 	private NurseryRepository nurseryRepository;
+
+	@Autowired
+	private RatingRepository ratingRepository;
 
 	public CareTaker createCaretaker(CareTaker caretaker) {
 		String nurseryId = caretaker.getNurseryId();
@@ -38,15 +43,6 @@ public class CareTakerService {
 		return careTakerRepository.save(caretaker);
 	}
 
-	public void addRating(Long caretakerId, int newRating) {
-		CareTaker caretaker = careTakerRepository.findById(caretakerId)
-				.orElseThrow(() -> new EntityNotFoundException("CareTaker not found with id: " + caretakerId));
-
-		caretaker.addRating(newRating);
-
-		careTakerRepository.save(caretaker);
-	}
-
 	public List<CareTaker> getCaretakersByNurseryId(String nurseryId) {
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
@@ -54,7 +50,7 @@ public class CareTakerService {
 		return careTakerRepository.findByNursery(nursery);
 	}
 
-	public CareTaker getCaretakerById(Long caretakerId) {
+	public CareTaker getCaretakerById(String caretakerId) {
 		return careTakerRepository.findById(caretakerId).orElse(null);
 	}
 
@@ -63,12 +59,29 @@ public class CareTakerService {
 		return careTakerRepository.save(updatedCaretaker);
 	}
 
-	public void deleteCaretaker(Long caretakerId) {
+	public void deleteCaretaker(String caretakerId) {
 		careTakerRepository.deleteById(caretakerId);
 	}
 
 	public List<CareTaker> getAllCaretakers() {
 		return careTakerRepository.findAll();
+	}
+
+	public CareTaker updateAverageRating(String caretakerId, String nurseryId) {
+		CareTaker caretaker = careTakerRepository.findById(caretakerId)
+				.orElseThrow(() -> new EntityNotFoundException("Caretaker not found with id: " + caretakerId));
+		
+		Nursery nursery = nurseryRepository.findById(nurseryId)
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + caretakerId));
+
+		List<Rating> ratings = ratingRepository.findByCaretakerId(caretakerId, nurseryId);
+
+		if (!ratings.isEmpty()) {
+			double averageRating = ratings.stream().mapToDouble(Rating::getRating).average().orElse(0.0);
+			caretaker.setAverageRating(averageRating);
+
+		}
+		return careTakerRepository.save(caretaker);
 	}
 
 }

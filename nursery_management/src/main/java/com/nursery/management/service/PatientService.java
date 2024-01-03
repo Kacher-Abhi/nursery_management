@@ -23,9 +23,6 @@ public class PatientService {
 
 	@Autowired
 	private NurseryRepository nurseryRepository;
-	
-	@Autowired
-	private CareTakerRepository careTakerRepository;
 
 	public List<Patient> getAllPatients() {
 		return patientRepository.findAll();
@@ -43,24 +40,6 @@ public class PatientService {
 
 		return patientRepository.save(patient);
 	}
-	
-    public Patient addRating(Long patientId, Long caretakerId, int newRating) {
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
-
-        CareTaker caretaker = careTakerRepository.findById(caretakerId)
-                .orElseThrow(() -> new EntityNotFoundException("CareTaker not found with id: " + caretakerId));
-
-        // Validate the rating
-        if (newRating < 1 || newRating > 5) {
-            throw new IllegalArgumentException("Rating should be between 1 and 5");
-        }
-
-        patient.setRating(newRating);
-        patient.setCaretaker(caretaker);
-
-        return patientRepository.save(patient);
-    }
 
 	public List<Patient> getPatientsByNurseryId(String nurseryId) {
 		Nursery nursery = nurseryRepository.findById(nurseryId)
@@ -69,12 +48,12 @@ public class PatientService {
 		return patientRepository.findByNursery(nursery);
 	}
 
-	public Patient getPatientById(Long patientId) {
+	public Patient getPatientById(String patientId) {
 		return patientRepository.findById(patientId)
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 	}
 
-	public void deletePatient(Long patientId) {
+	public void deletePatient(String patientId) {
 		Patient admin = getPatientById(patientId);
 		patientRepository.delete(admin);
 	}

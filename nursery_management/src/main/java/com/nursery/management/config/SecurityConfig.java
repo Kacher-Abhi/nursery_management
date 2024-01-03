@@ -70,10 +70,10 @@ public class SecurityConfig {
 	@SuppressWarnings("removal")
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(requests -> requests
-                .requestMatchers("/caretakers/**").hasAnyRole("ADMIN")
-                .requestMatchers("/admins/**").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/admins/**").hasAnyRole("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.POST, "/caretakers").hasAnyRole("ROLE_ADMIN"));;
+                .requestMatchers("/caretakers/**").permitAll()
+                .requestMatchers("/admins/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/admins/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/caretakers").permitAll());;
 		http.csrf().disable();
 		http.cors().disable();
 		http.formLogin();
