@@ -1,18 +1,11 @@
 package com.nursery.management.entity;
 
-import java.util.Collection;
 import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,12 +15,8 @@ import jakarta.persistence.Transient;
 @Entity
 public class Patient {
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column
-	private Long patientId;
+	private String patientId;
 
 	private String firstName;
 
@@ -43,7 +32,7 @@ public class Patient {
 
 	private String role;
 
-	private String passowrd;
+	private String password;
 
 	@Transient
 	private String nurseryId;
@@ -53,20 +42,24 @@ public class Patient {
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-	@ManyToOne
-	@JoinColumn(name = "caretaker_id")
-	private CareTaker caretaker;
+//	@JsonIgnore
+//	@ManyToOne
+//	@JoinColumn(name = "caretaker_id")
+//	private CareTaker caretaker;
 
-	private int rating;
-
-	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "patient")
+	private List<Rating> ratings;
+	
+	@OneToMany(mappedBy = "patient")
 	private List<Test> test;
 
-	public Long getPatientId() {
+
+	public String getPatientId() {
 		return patientId;
 	}
 
-	public void setPatientId(Long patientId) {
+	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
 
@@ -134,6 +127,38 @@ public class Patient {
 		this.nursery = nursery;
 	}
 
+//	public CareTaker getCaretaker() {
+//		return caretaker;
+//	}
+//
+//	public void setCaretaker(CareTaker caretaker) {
+//		this.caretaker = caretaker;
+//	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String passowrd) {
+		this.password = passowrd;
+	}
+
+	public List<Rating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+	
 	public List<Test> getTest() {
 		return test;
 	}
@@ -142,24 +167,8 @@ public class Patient {
 		this.test = test;
 	}
 
-	public CareTaker getCaretaker() {
-		return caretaker;
-	}
-
-	public void setCaretaker(CareTaker caretaker) {
-		this.caretaker = caretaker;
-	}
-
-	public int getRating() {
-		return rating;
-	}
-
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
-
-	public Patient(Long patientId, String firstName, String lastName, int age, String phoneNumber, String email,
-			String sex, String nurseryId, String role, String passowrd, CareTaker careTaker, int rating) {
+	public Patient(String patientId, String firstName, String lastName, int age, String phoneNumber, String email,
+			String sex, String nurseryId, String role, String passowrd) {
 		super();
 		this.patientId = patientId;
 		this.firstName = firstName;
@@ -170,30 +179,23 @@ public class Patient {
 		this.sex = sex;
 		this.nurseryId = nurseryId;
 		this.role = role;
-		this.passowrd = passowrd;
-		this.caretaker = careTaker;
-		this.rating = rating;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getPassowrd() {
-		return passowrd;
-	}
-
-	public void setPassowrd(String passowrd) {
-		this.passowrd = passowrd;
+		this.password = passowrd;
 	}
 
 	public Patient() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.patientId = generateRandomId();
+	}
+
+	private String generateRandomId() {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		StringBuilder randomId = new StringBuilder();
+		Random random = new Random();
+
+		for (int i = 0; i < 6; i++) {
+			randomId.append(characters.charAt(random.nextInt(characters.length())));
+		}
+
+		return randomId.toString();
 	}
 
 }

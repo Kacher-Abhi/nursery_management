@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 
@@ -22,28 +24,28 @@ public class Test {
 	@Column(nullable = false)
 	private String result;
 
+//	private String careTakerEmail;
+//
+//	private String patientEmail;
+
 	@Transient
 	private String nurseryId;
 
 	@Transient
-	private Long caretakerId;
+	private String patientId;
 
 	@Transient
-	private Long patientId;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "caretaker_id")
-	private CareTaker caretaker;
+	private String caretakerId;
 
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "patientId")
 	private Patient patient;
 
-	private String careTakerEmail;
-
-	private String patientEmail;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "caretaker_id")
+	private CareTaker caretaker;
 
 	@JsonIgnore
 	@ManyToOne
@@ -55,6 +57,24 @@ public class Test {
 
 	@JsonFormat(pattern = "HH:mm:ss")
 	private LocalTime testTakenTime;
+
+	@JsonIgnore
+	@Lob
+	@Column(name = "TestResult", length = Integer.MAX_VALUE, nullable = true)
+	private byte[] testResult;
+
+	@JsonIgnore
+	@Lob
+	@Column(name = "Prescription", length = Integer.MAX_VALUE, nullable = true)
+	private byte[] prescription;
+
+	public byte[] getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(byte[] prescription) {
+		this.prescription = prescription;
+	}
 
 	public Long getTestId() {
 		return testId;
@@ -80,44 +100,12 @@ public class Test {
 		this.result = result;
 	}
 
-	public CareTaker getCareTaker() {
-		return caretaker;
-	}
-
-	public void setCareTaker(CareTaker careTaker) {
-		this.caretaker = careTaker;
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
 	public String getNurseryId() {
 		return nurseryId;
 	}
 
 	public void setNurseryId(String nurseryId) {
 		this.nurseryId = nurseryId;
-	}
-
-	public Long getCaretakerId() {
-		return caretakerId;
-	}
-
-	public void setCaretakerId(Long caretakerId) {
-		this.caretakerId = caretakerId;
-	}
-
-	public Long getPatientId() {
-		return patientId;
-	}
-
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
 	}
 
 	public Nursery getNursery() {
@@ -144,6 +132,46 @@ public class Test {
 		this.testTakenTime = testTakenTime;
 	}
 
+//	public String getCareTakerEmail() {
+//		return careTakerEmail;
+//	}
+//
+//	public void setCareTakerEmail(String careTakerEmail) {
+//		this.careTakerEmail = careTakerEmail;
+//	}
+//
+//	public String getPatientEmail() {
+//		return patientEmail;
+//	}
+//
+//	public void setPatientEmail(String patientEmail) {
+//		this.patientEmail = patientEmail;
+//	}
+
+	public String getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
+	}
+
+	public String getCaretakerId() {
+		return caretakerId;
+	}
+
+	public void setCaretakerId(String caretakerId) {
+		this.caretakerId = caretakerId;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
 	public CareTaker getCaretaker() {
 		return caretaker;
 	}
@@ -152,36 +180,28 @@ public class Test {
 		this.caretaker = caretaker;
 	}
 
-	public String getCareTakerEmail() {
-		return careTakerEmail;
+	public byte[] getImage() {
+		return testResult;
 	}
 
-	public void setCareTakerEmail(String careTakerEmail) {
-		this.careTakerEmail = careTakerEmail;
-	}
-
-	public String getPatientEmail() {
-		return patientEmail;
-	}
-
-	public void setPatientEmail(String patientEmail) {
-		this.patientEmail = patientEmail;
+	public void setImage(byte[] testResult) {
+		this.testResult = testResult;
 	}
 
 	public Test(Long testId, String testName, String result, LocalDate testTakenDate, LocalTime testTakenTime,
-			Long patientId, String nurseryId, Long caretakerId, String careTakerEmail, String patientEmail) {
+			String nurseryId, String patientId, String caretakerId) {
 		super();
 		this.testId = testId;
 		this.testName = testName;
 		this.result = result;
 		this.testTakenDate = testTakenDate;
 		this.testTakenTime = testTakenTime;
-		this.patientId = patientId;
 		this.nurseryId = nurseryId;
+		this.patientId = patientId;
 		this.caretakerId = caretakerId;
-		this.careTakerEmail = careTakerEmail;
-		this.patientEmail = patientEmail;
-		
+//		this.careTakerEmail = careTakerEmail;
+//		this.patientEmail = patientEmail;
+
 	}
 
 	public Test() {

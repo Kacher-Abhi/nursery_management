@@ -45,7 +45,7 @@ public class PatientController {
 	}
 
 	@GetMapping("/{patientId}")
-	public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
+	public ResponseEntity<Patient> getPatientById(@PathVariable String patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {
@@ -55,23 +55,8 @@ public class PatientController {
 		}
 	}
 
-	@PostMapping("/{patientId}/rateCaretaker/{caretakerId}")
-	public ResponseEntity<?> rateCaretaker(@PathVariable Long patientId, @PathVariable Long caretakerId,
-			@RequestBody int newRating) {
-		try {
-			patientService.addRating(patientId, caretakerId, newRating);
-			return ResponseEntity.ok("Rating added successfully");
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-		}
-	}
-
 	@DeleteMapping("/{patientId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable Long patientId) {
+	public ResponseEntity<Void> deleteCaretaker(@PathVariable String patientId) {
 		Patient patient = patientService.getPatientById(patientId);
 
 		if (patient != null) {

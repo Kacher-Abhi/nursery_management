@@ -3,6 +3,7 @@ package com.nursery.management.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,6 +43,11 @@ public class Nursery {
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Patient> patient;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
+	private List<Rating> rating;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Test> test;
 
@@ -122,14 +128,6 @@ public class Nursery {
 		this.patient = patient;
 	}
 
-//	public List<Test> getTest() {
-//		return test;
-//	}
-//
-//	public void setTest(List<Test> test) {
-//		this.test = test;
-//	}
-
 	public byte[] getImage() {
 		return image;
 	}
@@ -138,7 +136,16 @@ public class Nursery {
 		this.image = image;
 	}
 
-	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, String email, String phoneNumber) {
+	public List<Rating> getRating() {
+		return rating;
+	}
+
+	public void setRating(List<Rating> rating) {
+		this.rating = rating;
+	}
+
+	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, String email,
+			String phoneNumber) {
 		super();
 		this.nurseryId = nurseryId;
 		this.nurseryName = nurseryName;

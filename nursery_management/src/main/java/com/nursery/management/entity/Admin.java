@@ -1,14 +1,9 @@
 package com.nursery.management.entity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Random;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,11 +12,8 @@ import jakarta.persistence.*;
 @Entity
 public class Admin {
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long adminId;
+	private String adminId;
 
 	@Column(nullable = false)
 	private String firstName;
@@ -50,11 +42,11 @@ public class Admin {
 
 	private boolean isSuperAdmin;
 
-	public Long getAdminId() {
+	public String getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(Long adminId) {
+	public void setAdminId(String adminId) {
 		this.adminId = adminId;
 	}
 
@@ -125,11 +117,12 @@ public class Admin {
 	public void setRole(String authorities) {
 		this.role = authorities;
 	}
+
 	public String getRole() {
 		return role;
 	}
 
-	public Admin(Long adminId, String firstName, String lastName, String email, String phone_number, String password,
+	public Admin(String adminId,String firstName, String lastName, String email, String phone_number, String password,
 			String nurseryId, boolean isSuperAdmin, Nursery nursery, List<GrantedAuthority> authorities) {
 		super();
 		this.adminId = adminId;
@@ -143,8 +136,20 @@ public class Admin {
 		this.nursery = nursery;
 	}
 
-	public Admin() {
-		super();
-		// TODO Auto-generated constructor stub
+	
+    public Admin() {
+        this.adminId = generateRandomId();
+    }
+
+	private String generateRandomId() {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		StringBuilder randomId = new StringBuilder();
+		Random random = new Random();
+
+		for (int i = 0; i < 6; i++) {
+			randomId.append(characters.charAt(random.nextInt(characters.length())));
+		}
+
+		return randomId.toString();
 	}
 }

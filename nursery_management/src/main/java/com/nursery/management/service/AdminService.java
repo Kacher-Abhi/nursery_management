@@ -62,7 +62,7 @@ public class AdminService {
 		return adminRepository.findByEmail(email);
 	}
 
-	public Admin updateAdmin(Long adminId, Admin updatedAdmin) {
+	public Admin updateAdmin(String adminId, Admin updatedAdmin) {
 		Admin existingAdmin = getAdminById(adminId);
 
 		existingAdmin.setFirstName(updatedAdmin.getFirstName());
@@ -76,12 +76,12 @@ public class AdminService {
 		return adminRepository.save(existingAdmin);
 	}
 
-	public void deleteAdmin(Long adminId) {
+	public void deleteAdmin(String adminId) {
 		Admin admin = getAdminById(adminId);
 		adminRepository.delete(admin);
 	}
 
-	private Admin getAdminById(Long adminId) {
+	public Admin getAdminById(String adminId) {
 		return adminRepository.findById(adminId)
 				.orElseThrow(() -> new EntityNotFoundException("Admin not found with id: " + adminId));
 	}

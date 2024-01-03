@@ -11,8 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Column;
 import jakarta.persistence.Transient;
 
-public class CurrentUser implements UserDetails{
-	private long id;
+public class CurrentUser implements UserDetails {
+	private static final long serialVersionUID = 1L;
+	private String id;
 	private String email;
 	private String password;
 	private boolean active = true;
@@ -29,6 +30,7 @@ public class CurrentUser implements UserDetails{
 		this.nursery_id = user.getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
 	}
+
 	public CurrentUser(Patient user) {
 		this.id = user.getPatientId();
 		this.email = user.getEmail();
@@ -36,6 +38,7 @@ public class CurrentUser implements UserDetails{
 		this.nursery_id = user.getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
 	}
+
 	public CurrentUser(CareTaker user) {
 		this.id = user.getCaretakerId();
 		this.email = user.getEmail();

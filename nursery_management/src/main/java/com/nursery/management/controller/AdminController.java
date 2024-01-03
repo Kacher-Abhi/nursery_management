@@ -34,9 +34,14 @@ public class AdminController {
 	private NurseryService nurseryService;
 
 	@GetMapping
-
 	public List<Admin> getAllAdmins() {
 		return adminService.getAllAdmins();
+	}
+	
+	@GetMapping("/byId/{adminId}")
+	public Admin getAdminById(@PathVariable String adminId) {
+		return adminService.getAdminById(adminId);
+		
 	}
 
 	@GetMapping("/byNursery/{nurseryId}")
@@ -59,7 +64,7 @@ public class AdminController {
 	}
 
 	@PutMapping("/{adminId}")
-	public ResponseEntity<?> updateAdmin(@PathVariable Long adminId, @RequestBody Admin updatedAdmin) {
+	public ResponseEntity<?> updateAdmin(@PathVariable String adminId, @RequestBody Admin updatedAdmin) {
 		try {
 			Admin admin = adminService.updateAdmin(adminId, updatedAdmin);
 			return ResponseEntity.ok(admin);
@@ -70,7 +75,7 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/{adminId}")
-	public ResponseEntity<Void> deleteAdmin(@PathVariable Long adminId) {
+	public ResponseEntity<Void> deleteAdmin(@PathVariable String adminId) {
 		try {
 			adminService.deleteAdmin(adminId);
 			return ResponseEntity.noContent().build();
