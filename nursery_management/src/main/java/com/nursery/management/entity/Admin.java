@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -35,10 +36,9 @@ public class Admin {
 	@Transient
 	private String nurseryId;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
-	private Nursery nursery;
+	Nursery nursery;
 
 	private boolean isSuperAdmin;
 
@@ -122,8 +122,8 @@ public class Admin {
 		return role;
 	}
 
-	public Admin(String adminId,String firstName, String lastName, String email, String phone_number, String password,
-			String nurseryId, boolean isSuperAdmin, Nursery nursery, List<GrantedAuthority> authorities) {
+	public Admin(String adminId, String firstName, String lastName, String email, String phone_number, String password, String nurseryId,
+			boolean isSuperAdmin, Nursery nursery, List<GrantedAuthority> authorities) {
 		super();
 		this.adminId = adminId;
 		this.firstName = firstName;
@@ -136,10 +136,9 @@ public class Admin {
 		this.nursery = nursery;
 	}
 
-	
-    public Admin() {
-        this.adminId = generateRandomId();
-    }
+	public Admin() {
+		this.adminId = generateRandomId();
+	}
 
 	private String generateRandomId() {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

@@ -34,33 +34,30 @@ public class AdminService {
 	}
 
 	public Admin createAdmin(Admin admin) {
+		if (adminRepository.existsByEmailAndNurseryId(admin.getEmail(), admin.getNurseryId())) {
+			throw new RuntimeException("Email is already in use for the given nursery");
+		}
 		String nurseryId = admin.getNurseryId();
 		System.out.println(nurseryId);
-		
-//		Admin createAdmin = new Admin();
-//		
-//		createAdmin.setName(admin.getName());
-//		createAdmin.setEmail(admin.getEmail());
-//		createAdmin.setNurseryId(nurseryId);
-//		createAdmin.setPassword(admin.getPassword());
-//		createAdmin.setPhone_number(admin.getPhone_number());
-//		createAdmin.setSuperAdmin(admin.isSuperAdmin());
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
 		System.out.println(nursery.getNurseryId());
+		
 		if (nurseryId != null) {
 			admin.setNursery(nursery);
 		}
-		if(admin.isSuperAdmin()) admin.setRole(Role.ROLE_SUPER_ADMIN.name());
-		else admin.setRole(Role.ROLE_ADMIN.name());
+		if (admin.isSuperAdmin())
+			admin.setRole(Role.ROLE_SUPER_ADMIN.name());
+		else
+			admin.setRole(Role.ROLE_ADMIN.name());
 		admin.setPassword(BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt(4)));
 
 		return adminRepository.save(admin);
 	}
 
-	public Admin getAdminByEmail(String email) {
-		return adminRepository.findByEmail(email);
-	}
+//	public Admin getAdminByEmail(String email) {
+//		return adminRepository.findByEmail(email);
+//	}
 
 	public Admin updateAdmin(String adminId, Admin updatedAdmin) {
 		Admin existingAdmin = getAdminById(adminId);
@@ -85,6 +82,5 @@ public class AdminService {
 		return adminRepository.findById(adminId)
 				.orElseThrow(() -> new EntityNotFoundException("Admin not found with id: " + adminId));
 	}
-	
-	
+
 }
