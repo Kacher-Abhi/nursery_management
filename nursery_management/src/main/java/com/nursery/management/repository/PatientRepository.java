@@ -15,6 +15,11 @@ public interface PatientRepository extends JpaRepository<Patient, String> {
 
 	Patient findByEmail(String email);
 
-	@Query("SELECT COUNT(p) > 0 FROM Patient p WHERE p.id = :patientId AND p.nursery.id = :nurseryId")
-	boolean existsByIdAndNurseryId(@Param("patientId") String patientId, @Param("nurseryId") String nurseryId);
+//	@Query("SELECT COUNT(p) > 0 FROM Patient p WHERE p.id = :patientId AND p.nursery.id = :nurseryId")
+//	boolean existsByIdAndNurseryId(@Param("patientId") String patientId, @Param("nurseryId") String nurseryId);
+	
+	@Query("SELECT COUNT(p) > 0 FROM Patient p WHERE p.email = :email AND p.nursery.nurseryId = :nurseryId")
+	boolean existsByEmailAndNurseryId(@Param("email") String email, @Param("nurseryId") String nurseryId);
+
+	
 }

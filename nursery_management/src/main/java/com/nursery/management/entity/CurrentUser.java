@@ -27,14 +27,14 @@ public class CurrentUser implements UserDetails {
 		this.id = user.getAdminId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.nursery_id = user.getNurseryId();
+		this.nursery_id = user.getNursery().getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
 	}
 
 	public CurrentUser(Patient user) {
 		this.id = user.getPatientId();
 		this.email = user.getEmail();
-		this.password = user.getPassowrd();
+		this.password = user.getPassword();
 		this.nursery_id = user.getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
 	}

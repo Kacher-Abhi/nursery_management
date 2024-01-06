@@ -34,12 +34,15 @@ public class Nursery {
 	@Column(name = "PhoneNumber", nullable = false)
 	private String phoneNumber;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Admin> admins;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<CareTaker> caretakers;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Patient> patient;
 

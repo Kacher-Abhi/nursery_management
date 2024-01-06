@@ -15,25 +15,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-	
+
 	@Autowired
 	private TokenService tokenService;
 	@Autowired
 	private CurrentUserService currentUserService;
-	
+
 	@PostMapping("/token")
-	public JwtResponse postMethodName(@RequestParam("nurseryId") String nurseryId, @RequestParam("username") String username, @RequestParam("password") String password)
-   {
-		//TODO: process POST request
-		UserDetails user = currentUserService.loadUserByUsername(username);
-		
-		JwtResponse response = tokenService.generateToken((CurrentUser)user, nurseryId);
-		
+	public JwtResponse postMethodName(@RequestParam("nurseryId") String nurseryId,
+			@RequestParam("username") String username, @RequestParam("password") String password) {
+		// TODO: process POST request
+		String combinedUsername = username + ":" + nurseryId;
+
+		UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+
+		JwtResponse response = tokenService.generateToken((CurrentUser) user, nurseryId);
+
 		return response;
 	}
-	
+
 }

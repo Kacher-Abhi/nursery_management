@@ -3,9 +3,13 @@ package com.nursery.management.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.CareTaker;
+import com.nursery.management.entity.CurrentUser;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.repository.CareTakerRepository;
 import com.nursery.management.repository.NurseryRepository;
@@ -20,7 +24,7 @@ public class NurseryService {
 
 	@Autowired
 	private CareTakerRepository careTakerRepository;
-	
+
 	@Autowired
 	private JwtSecService jwtSecService;
 
@@ -62,7 +66,7 @@ public class NurseryService {
 		existingNursery.setSecondaryColor(updatedNursery.getSecondaryColor());
 		existingNursery.setEmail(updatedNursery.getEmail());
 		existingNursery.setPhoneNumber(updatedNursery.getPhoneNumber());
-		
+
 		return nurseryRepository.save(existingNursery);
 	}
 

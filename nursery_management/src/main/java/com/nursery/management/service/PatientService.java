@@ -29,6 +29,9 @@ public class PatientService {
 	}
 
 	public Patient createPatient(Patient patient) {
+		if (patientRepository.existsByEmailAndNurseryId(patient.getEmail(), patient.getNurseryId())) {
+			throw new RuntimeException("Email is already in use");
+		}
 		String nurseryId = patient.getNurseryId();
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));

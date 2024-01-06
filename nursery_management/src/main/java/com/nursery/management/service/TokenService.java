@@ -49,21 +49,17 @@ public class TokenService {
 
         return reponse;
 	}
+
 	public CurrentUser parseToken(String token) {
-        byte[] secretBytes = jwtSecret.getBytes();
+		byte[] secretBytes = jwtSecret.getBytes();
 
-        Jws<Claims> jwsClaims = Jwts.parserBuilder()
-                .setSigningKey(secretBytes)
-                .build()
-                .parseClaimsJws(token);
+		Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(secretBytes).build().parseClaimsJws(token);
 
-        String username = jwsClaims.getBody()
-                .getSubject();
-        String role = jwsClaims.getBody()
-                .get("role", String.class);
-        String tenant = jwsClaims.getBody().get("tenant", String.class); 
+		String username = jwsClaims.getBody().getSubject();
+		String role = jwsClaims.getBody().get("role", String.class);
+		String tenant = jwsClaims.getBody().get("tenant", String.class);
 
-        return new CurrentUser(username, role, tenant);
-    }
+		return new CurrentUser(username, role, tenant);
+	}
 	
 }

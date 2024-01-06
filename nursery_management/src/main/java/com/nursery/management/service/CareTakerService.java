@@ -28,6 +28,9 @@ public class CareTakerService {
 	private RatingRepository ratingRepository;
 
 	public CareTaker createCaretaker(CareTaker caretaker) {
+		if (careTakerRepository.existsByEmailAndNurseryId(caretaker.getEmail(), caretaker.getNurseryId())) {
+			throw new RuntimeException("Email is already in use");
+		}
 		String nurseryId = caretaker.getNurseryId();
 		System.out.println(nurseryId);
 		Nursery nursery = nurseryRepository.findById(caretaker.getNurseryId())
@@ -70,7 +73,7 @@ public class CareTakerService {
 	public CareTaker updateAverageRating(String caretakerId, String nurseryId) {
 		CareTaker caretaker = careTakerRepository.findById(caretakerId)
 				.orElseThrow(() -> new EntityNotFoundException("Caretaker not found with id: " + caretakerId));
-		
+
 		Nursery nursery = nurseryRepository.findById(nurseryId)
 				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + caretakerId));
 

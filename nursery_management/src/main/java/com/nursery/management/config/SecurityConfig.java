@@ -77,19 +77,16 @@ public class SecurityConfig {
 //	}
 
 	@Bean
-	public SecurityFilterChain securityConfiguration(HttpSecurity http) throws Exception{
-        http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .requestMatchers("/auth", "/auth/token").permitAll()
-                
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(TokenService),
-                        UsernamePasswordAuthenticationFilter.class);
-        http.csrf().disable();
-        return http.build();
-    }
-	
-	
+	public SecurityFilterChain securityConfiguration(HttpSecurity http) throws Exception {
+		http.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().authorizeRequests()
+				.requestMatchers("/auth", "/auth/token").permitAll()
+				.requestMatchers("/admins/**").permitAll()
+				.and()
+				.addFilterBefore(new JwtAuthenticationFilter(TokenService), UsernamePasswordAuthenticationFilter.class);
+		http.csrf().disable();
+		return http.build();
+	}
+
 }

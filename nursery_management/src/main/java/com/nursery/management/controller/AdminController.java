@@ -3,6 +3,7 @@ package com.nursery.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +26,7 @@ import jakarta.persistence.EntityNotFoundException;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/admins")
+@CacheEvict(value = "config", allEntries = true)
 public class AdminController {
 
 	@Autowired
@@ -37,17 +39,19 @@ public class AdminController {
 	public List<Admin> getAllAdmins() {
 		return adminService.getAllAdmins();
 	}
-	
+
 	@GetMapping("/byId/{adminId}")
 	public Admin getAdminById(@PathVariable String adminId) {
 		return adminService.getAdminById(adminId);
-		
+
 	}
 
 	@GetMapping("/byNursery/{nurseryId}")
 	public List<Admin> getAdminsByNursery(@PathVariable String nurseryId) {
+
 		Nursery nursery = nurseryService.getNurseryById(nurseryId);
 		return adminService.getAdminsByNursery(nursery);
+
 	}
 
 	@PostMapping("/createAdmin")

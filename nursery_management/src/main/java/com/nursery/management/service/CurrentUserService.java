@@ -20,23 +20,28 @@ public class CurrentUserService implements UserDetailsService {
 
 	@Autowired
 	private PatientRepository patientRepository;
-	
+
 	@Autowired
 	private CareTakerRepository careTakerRepository;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		Admin admin = adminRepository.findByEmail(username);
-//		if (admin != null) {
-//			System.out.println("Admin found with email " + username);
-//			return new CurrentUser(admin);
-//		}
+	public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
+
+		String[] split = input.split(":");
+		String username = split[0];
+		String nurseryId = split[1];
+
+		Admin admin = adminRepository.existsByEmailAndNursery(username, nurseryId);
+		if (admin != null) {
+			System.out.println("Admin found with email " + username);
+			return new CurrentUser(admin);
+		}
 
 		Patient patient = patientRepository.findByEmail(username);
 		if (patient != null) {
 			return new CurrentUser(patient);
 		}
-		
+
 		CareTaker careTaker = careTakerRepository.findByEmail(username).get();
 
 		throw new UsernameNotFoundException("User not found with username: " + username);
