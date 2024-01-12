@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.nursery.management.entity.Role;
 import com.nursery.management.service.TokenService;
 
 import io.jsonwebtoken.security.Keys;
@@ -34,8 +35,18 @@ public class SecurityConfig {
 	private TokenService TokenService;
 	@Autowired
 	private UserDetailsService userDetailsService;
+	   
+	private final TokenService tokenService;
 
-	@Bean
+
+	public SecurityConfig(TokenService tokenService) {
+	        this.tokenService = tokenService;
+	    }
+
+	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+	        return new JwtAuthenticationFilter(tokenService);
+	    }
+
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
@@ -50,43 +61,17 @@ public class SecurityConfig {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
-//	@SuppressWarnings("removal")
-//	protected void configure(HttpSecurity http) throws Exception {
-//		// TODO Auto-generated method stub
-//		http.authorizeRequests()
-//		.requestMatchers("/caretakers/**").hasRole("ADMIN")
-//		.requestMatchers("/admins/**").permitAll()
-//		.requestMatchers(HttpMethod.POST,"/admins").permitAll()
-//		.requestMatchers(HttpMethod.POST,"/caretakers").hasAnyRole("ADMIN","SUPERADMIN")
-//
-//
-////		.requestMatchers("/expenses/**").hasAnyRole("OWNER","CASHIER")
-////		.requestMatchers("/billing/**").hasAnyRole("OWNER","CASHIER")
-////		.requestMatchers("/item/**").hasAnyRole("ADMIN","OWNER")// for viewing reports and editing menu items 
-////		.requestMatchers(HttpMethod.POST,"/items").hasAnyRole("ADMIN","OWNER")
-////		.requestMatchers("/admin/**").hasAnyRole("ADMIN","OWNER")// for adding new employees
-////		.requestMatchers(HttpMethod.POST,"/users").hasAnyRole("ADMIN","OWNER")
-////		.requestMatchers("/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")//for viewing order Status
-////		.requestMatchers(HttpMethod.POST,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
-////		.requestMatchers(HttpMethod.PUT,"/orders/**").hasAnyRole("CHEF","OWNER","CASHIER")
-////		.requestMatchers("/customer/**").hasAnyRole("OWNER","CASHIER")// for adding new customers
-////		.requestMatchers(HttpMethod.POST,"/cust").hasAnyRole("OWNER","CASHIER")
-//		.requestMatchers("/").permitAll()
-//		.and().formLogin();
-//		http.csrf().disable();  
-//	}
-
 	@Bean
 	public SecurityFilterChain securityConfiguration(HttpSecurity http) throws Exception {
-		http.sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().authorizeRequests()
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.requestMatchers("/auth", "/auth/token").permitAll()
-				.requestMatchers("/admins/**").permitAll()
+				.requestMatchers("/admins/**").hasRole("ADMIN")
 				.and()
-				.addFilterBefore(new JwtAuthenticationFilter(TokenService), UsernamePasswordAuthenticationFilter.class);
-		http.csrf().disable();
+				.addFilterBefore(new JwtAuthenticationFilter(TokenService)
+				,UsernamePasswordAuthenticationFilter.class);
+		http.cors().and().csrf().disable();
 		return http.build();
+
 	}
 
 }

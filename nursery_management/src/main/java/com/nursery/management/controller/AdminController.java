@@ -26,7 +26,6 @@ import jakarta.persistence.EntityNotFoundException;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/admins")
-@CacheEvict(value = "config", allEntries = true)
 public class AdminController {
 
 	@Autowired

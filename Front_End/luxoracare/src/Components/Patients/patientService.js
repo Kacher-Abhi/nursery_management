@@ -22,6 +22,15 @@ const PatientService = {
       throw error;
     }
   },
+
+  getCareTaker: async (caretakerId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/byCaretaker/${caretakerId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default PatientService;

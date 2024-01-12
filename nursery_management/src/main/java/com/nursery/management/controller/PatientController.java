@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Patient;
+import com.nursery.management.service.CareTakerService;
 import com.nursery.management.service.PatientService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +28,9 @@ public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private CareTakerService careTakerService;
 
 	@GetMapping
 	public List<Patient> getAllPatients() {
@@ -55,6 +60,16 @@ public class PatientController {
 		}
 	}
 
+	@GetMapping("byCaretaker/{caretakerId}")
+	public ResponseEntity<CareTaker> getPatientByCaretakerId(@PathVariable String caretakerId) {
+		CareTaker caretaker = careTakerService.getCaretakerById(caretakerId);
+
+		if (caretaker != null) {
+			return ResponseEntity.ok(caretaker);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 	@DeleteMapping("/{patientId}")
 	public ResponseEntity<Void> deleteCaretaker(@PathVariable String patientId) {
 		Patient patient = patientService.getPatientById(patientId);

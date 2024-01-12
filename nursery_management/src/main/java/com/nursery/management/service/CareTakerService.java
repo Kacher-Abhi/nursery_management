@@ -1,6 +1,7 @@
 package com.nursery.management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.CareTaker;
@@ -42,6 +43,7 @@ public class CareTakerService {
 		} else {
 			throw new RuntimeException("Nursery Id should not be null");
 		}
+		caretaker.setPassword(BCrypt.hashpw(caretaker.getPassword(), BCrypt.gensalt(4)));
 
 		return careTakerRepository.save(caretaker);
 	}

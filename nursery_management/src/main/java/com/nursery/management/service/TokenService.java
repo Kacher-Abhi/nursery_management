@@ -21,37 +21,34 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class TokenService {
-	
+
 	@Autowired
 	private JwtSecService jwtSecService;
-	
+
 	private String jwtSecret;
 
-
 	public JwtResponse generateToken(CurrentUser user, String tenantId) {
-        Instant expirationTime = Instant.now().plus(1, ChronoUnit.HOURS);
-        Date expirationDate = Date.from(expirationTime);
-        JwtSec secretKey = jwtSecService.getExisting(tenantId);
-        this.jwtSecret = secretKey.getSecretKey();
+		Instant expirationTime = Instant.now().plus(1, ChronoUnit.HOURS);
+		Date expirationDate = Date.from(expirationTime);
+		JwtSec secretKey = jwtSecService.getExisting(tenantId);
+		this.jwtSecret = secretKey.getSecretKey();
 
-        Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+		Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
-        String compactTokenString = Jwts.builder()
-                .claim("sub", user.getUsername())
-                .claim("role", user.getUserRole())
-                .claim("tenant", user.getTenant())
-                .setExpiration(expirationDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-        JwtResponse reponse = new JwtResponse();
-        reponse.setExpires(expirationDate);
-        reponse.setToken(compactTokenString);
+		String compactTokenString = Jwts.builder().claim("sub", user.getUsername()).claim("role", user.getUserRole())
+				.claim("tenant", user.getTenant()).setExpiration(expirationDate).signWith(key, SignatureAlgorithm.HS256)
+				.compact();
+		JwtResponse reponse = new JwtResponse();
+		reponse.setExpires(expirationDate);
+		reponse.setToken(compactTokenString);
 
-        return reponse;
+		return reponse;
 	}
 
-	public CurrentUser parseToken(String token) {
-		byte[] secretBytes = jwtSecret.getBytes();
+	public CurrentUser parseToken(String token, String nurseryId) {
+	    var jwtSecret = jwtSecService.getExisting(nurseryId);
+		byte[] secretBytes = jwtSecret.getSecretKey().getBytes();
+		
 
 		Jws<Claims> jwsClaims = Jwts.parserBuilder().setSigningKey(secretBytes).build().parseClaimsJws(token);
 
@@ -61,5 +58,5 @@ public class TokenService {
 
 		return new CurrentUser(username, role, tenant);
 	}
-	
+
 }

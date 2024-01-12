@@ -32,10 +32,6 @@ public class CareTaker {
 
 	private String role;
 
-//	private int numberOfRatings;
-//
-//	private int totalRating;
-//
 	private double averageRating;
 
 	@Transient
@@ -49,8 +45,13 @@ public class CareTaker {
 	@OneToMany(mappedBy = "caretaker")
 	private List<Rating> ratings;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "caretaker")
 	private List<Test> test;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "caretaker")
+	private List<Patient> patient;
 
 	public String getCaretakerId() {
 		return caretakerId;
@@ -97,7 +98,7 @@ public class CareTaker {
 	}
 
 	public void setPassword(String password) {
-		this.phoneNumber = password;
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -160,40 +161,18 @@ public class CareTaker {
 		return test;
 	}
 
+	public List<Patient> getPatient() {
+		return patient;
+	}
+
+	public void setPatient(List<Patient> patient) {
+		this.patient = patient;
+	}
+
 	public void setTest(List<Test> test) {
 		this.test = test;
 	}
 
-//	public void addRating(int newRating) {
-//		// Validate the rating
-//		if (newRating < 1 || newRating > 5) {
-//			throw new IllegalArgumentException("Rating should be between 1 and 5");
-//		}
-//
-//		// Update totalRating and numberOfRatings
-//		totalRating += newRating;
-//		numberOfRatings++;
-//
-//		// Recalculate the averageRating
-//		averageRating = (double) totalRating / numberOfRatings;
-//	}
-//
-//	public int getNumberOfRatings() {
-//		return numberOfRatings;
-//	}
-//
-//	public void setNumberOfRatings(int numberOfRatings) {
-//		this.numberOfRatings = numberOfRatings;
-//	}
-//
-//	public int getTotalRating() {
-//		return totalRating;
-//	}
-//
-//	public void setTotalRating(int totalRating) {
-//		this.totalRating = totalRating;
-//	}
-//
 	public double getAverageRating() {
 		return averageRating;
 	}
@@ -217,8 +196,6 @@ public class CareTaker {
 		this.designation = designation;
 		this.nurseryId = nurseryId;
 		this.nursery = nursery;
-//		this.numberOfRatings = numberOfRatings;
-//		this.totalRating = totalRating;
 		this.averageRating = averageRating;
 	}
 
