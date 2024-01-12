@@ -1,0 +1,107 @@
+/* NurseryList.css */
+
+.nursery-list-container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px; /* Add margin for spacing */
+  }
+  
+  .nursery-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nursery-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .nursery-logo {
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 20px;
+    border-radius: 8px;
+  }
+  
+  .nursery-details {
+    flex-grow: 1;
+    padding: 0 20px; /* Add padding to the right of the logo */
+  }
+  
+  .contact-info {
+    color: gray;
+  }
+  
+  .nursery-name {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333; /* Darken text color for better readability */
+  }
+  
+  .buttons-container {
+    display: flex;
+    gap: 15px; /* Increased gap between buttons */
+  }
+  
+  .sign-in-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sign-in-button:hover {
+    background-color: #297fb8;
+  }
+  
+  .sign-up-button {
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sign-up-button:hover {
+    background-color: #27ae60;
+  }
+  /* Additional styling for a cleaner look */
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Styling for the search button */
+.search-container {
+    margin-top: 20px;
+  }
+  
+  .search-input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-button:hover {
+    background-color: #45a049;
+  }
