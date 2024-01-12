@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AdminService from "./adminService";
 import "./style.css";
+import Layout from "../Layout/Layout";
 
 const AdminForm = () => {
   const [adminData, setAdminData] = useState({
@@ -10,7 +11,7 @@ const AdminForm = () => {
     phone_number: "",
     password: "",
     nurseryId: "",
-    isSuperAdmin: false,
+    superAdmin: 0,
   });
 
   const handleChange = (e) => {
@@ -35,7 +36,7 @@ const AdminForm = () => {
         phone_number: "",
         password: "",
         nurseryId: "",
-        isSuperAdmin: false,
+        superAdmin: 0,
       });
     } catch (error) {
       console.error("Error creating admin:", error);
@@ -45,6 +46,7 @@ const AdminForm = () => {
   };
 
   return (
+    <Layout>
     <>
     <h1>Admin Pannel</h1>
     <div className="container">
@@ -128,6 +130,7 @@ const AdminForm = () => {
       </div>
     </div>
     </>
+    </Layout>
   );
 };
 

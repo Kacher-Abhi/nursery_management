@@ -9,6 +9,9 @@ const NurseryForm = () => {
     secondaryColor: "",
     email: "",
     phoneNumber: "",
+    state: "",
+    zipcode: "",
+    address: "",
     image: null,
   });
 
@@ -35,13 +38,14 @@ const NurseryForm = () => {
         secondaryColor: "",
         email: "",
         phoneNumber: "",
-        image: undefined // Set to undefined to properly reset the file input
+        state: "",
+        zipcode: "",
+        address: "",
+        image: undefined, // Set to undefined to properly reset the file input
       });
-
     } catch (error) {
       console.error("Error creating nursery:", error);
       alert(error.response.data);
-
     }
   };
   return (
@@ -108,6 +112,36 @@ const NurseryForm = () => {
               id="phoneNumber"
               name="phoneNumber"
               value={nurseryData.phoneNumber}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="state">State :</label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              value={nurseryData.state}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="zipcode">Zip Code :</label>
+            <input
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              value={nurseryData.zipcode}
+              onChange={handleChange}
+              required
+            />
+
+            <label htmlFor="address">Address :</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={nurseryData.address}
               onChange={handleChange}
               required
             />
