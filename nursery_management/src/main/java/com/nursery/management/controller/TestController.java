@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nursery.management.entity.Admin;
+import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Test;
 import com.nursery.management.service.TestService;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.BufferedOutputStream;
@@ -21,9 +23,11 @@ import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/tests")
 public class TestController {
@@ -44,9 +48,11 @@ public class TestController {
 	public ResponseEntity<?> createNursery(@RequestParam("testName") String testName,
 			@RequestParam("result") String result, @RequestParam("nurseryId") String nurseryId,
 			@RequestParam("patientId") String patientId, @RequestParam("caretakerId") String caretakerId,
-			@RequestParam("testTakenDate") LocalDate testTakenDate, @RequestParam("testTakenTime") LocalTime testTakenTime,
+			@RequestParam("testTakenDate") LocalDate testTakenDate,
+			@RequestParam("testTakenTime") LocalTime testTakenTime,
 
-			final @RequestParam("testResult") MultipartFile file, final @RequestParam("prescription") MultipartFile prescription,
+			final @RequestParam("testResult") MultipartFile file,
+			final @RequestParam("prescription") MultipartFile prescription,
 
 			Model model, HttpServletRequest request) {
 		try {
@@ -68,7 +74,7 @@ public class TestController {
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
 				stream.write(file.getBytes());
 				stream.close();
-				
+
 				BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
 				stream1.write(prescription.getBytes());
 				stream1.close();
@@ -85,10 +91,9 @@ public class TestController {
 			createdtest.setNurseryId(nurseryId);
 			createdtest.setPatientId(patientId);
 			createdtest.setCaretakerId(caretakerId);
-			
+
 			createdtest.setTestTakenDate(testTakenDate);
 			createdtest.setTestTakenTime(testTakenTime);
-
 
 			createdtest.setImage(imageData);
 			createdtest.setPrescription(prescriptionData);
@@ -138,5 +143,16 @@ public class TestController {
 			@PathVariable String caretakerId, @PathVariable String patientId) {
 		List<Test> tests = testService.getTestsForCareTakerAndPatient(caretakerId, nurseryId, patientId);
 		return new ResponseEntity<>(tests, HttpStatus.OK);
+	}
+
+	@GetMapping("/{nurseryId}/caretaker/{patientId}")
+	public ResponseEntity<List<CareTaker>> getCrateTakerByPatientId(@PathVariable String nurseryId, @PathVariable String patientId) {
+		try {
+			List<CareTaker> caretaker = testService.getCrateTakerByPatientId(nurseryId, patientId);
+			return new ResponseEntity<>(caretaker, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+		}
 	}
 }

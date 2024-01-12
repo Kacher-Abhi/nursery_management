@@ -36,21 +36,23 @@ public class Patient {
 
 	@Transient
 	private String nurseryId;
+	
+	@Transient
+	private String careTakerId;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
 
-//	@JsonIgnore
-//	@ManyToOne
-//	@JoinColumn(name = "caretaker_id")
-//	private CareTaker caretaker;
+	@ManyToOne
+	@JoinColumn(name = "caretaker_id")
+	private CareTaker caretaker;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Rating> ratings;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Test> test;
 
@@ -127,13 +129,21 @@ public class Patient {
 		this.nursery = nursery;
 	}
 
-//	public CareTaker getCaretaker() {
-//		return caretaker;
-//	}
-//
-//	public void setCaretaker(CareTaker caretaker) {
-//		this.caretaker = caretaker;
-//	}
+	public CareTaker getCaretaker() {
+		return caretaker;
+	}
+
+	public void setCaretaker(CareTaker caretaker) {
+		this.caretaker = caretaker;
+	}
+
+	public String getCareTakerId() {
+		return careTakerId;
+	}
+
+	public void setCareTakerId(String careTakerId) {
+		this.careTakerId = careTakerId;
+	}
 
 	public String getRole() {
 		return role;
@@ -168,7 +178,7 @@ public class Patient {
 	}
 
 	public Patient(String patientId, String firstName, String lastName, int age, String phoneNumber, String email,
-			String sex, String nurseryId, String role, String passowrd) {
+			String sex, String nurseryId, String role, String passowrd, String caretakerId) {
 		super();
 		this.patientId = patientId;
 		this.firstName = firstName;
@@ -180,6 +190,7 @@ public class Patient {
 		this.nurseryId = nurseryId;
 		this.role = role;
 		this.password = passowrd;
+		this.careTakerId = caretakerId;
 	}
 
 	public Patient() {

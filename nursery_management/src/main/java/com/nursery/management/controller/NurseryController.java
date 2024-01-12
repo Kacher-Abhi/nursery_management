@@ -62,6 +62,8 @@ public class NurseryController {
 			@RequestParam("nurseryName") String nurseryName, @RequestParam("primaryColor") String primaryColor,
 			@RequestParam("secondaryColor") String secondaryColor, final @RequestParam("image") MultipartFile file,
 			@RequestParam("email") String email, @RequestParam("phoneNumber") String phoneNumber,
+			@RequestParam("zipcode") String zipcode, @RequestParam("address") String address,
+			@RequestParam("state") String state,
 
 			Model model, HttpServletRequest request) {
 		try {
@@ -95,6 +97,9 @@ public class NurseryController {
 			createdNursery.setImage(imageData);
 			createdNursery.setEmail(email);
 			createdNursery.setPhoneNumber(phoneNumber);
+			createdNursery.setZipcode(zipcode);
+			createdNursery.setAddress(address);			
+			createdNursery.setState(state);
 			nurseryService.createNursery(createdNursery);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Nursery Added Successfully");
 		} catch (Exception e) {

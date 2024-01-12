@@ -37,17 +37,14 @@ public class Test {
 	@Transient
 	private String caretakerId;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "patientId")
 	private Patient patient;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "caretaker_id")
 	private CareTaker caretaker;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;

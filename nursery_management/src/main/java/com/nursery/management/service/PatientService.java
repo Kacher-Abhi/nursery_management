@@ -3,6 +3,7 @@ package com.nursery.management.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.CareTaker;
@@ -41,6 +42,7 @@ public class PatientService {
 			patient.setRole(Role.ROLE_PATIENT.name());
 		}
 
+		patient.setPassword(BCrypt.hashpw(patient.getPassword(), BCrypt.gensalt(4)));
 		return patientRepository.save(patient);
 	}
 

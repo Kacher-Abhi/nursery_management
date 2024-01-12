@@ -33,6 +33,15 @@ public class Nursery {
 
 	@Column(name = "PhoneNumber", nullable = false)
 	private String phoneNumber;
+	
+	@Column(name = "ZipCode", nullable = false)
+	private String zipcode;
+	
+	@Column(name = "State", nullable = false)
+	private String state;
+	
+	@Column(name = "Address", nullable = false)
+	private String address;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
@@ -54,7 +63,6 @@ public class Nursery {
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Test> test;
 
-	@JsonIgnore
 	@Lob
 	@Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
 	private byte[] image;
@@ -107,6 +115,30 @@ public class Nursery {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public List<Admin> getAdmins() {
 		return admins;
 	}
@@ -147,8 +179,9 @@ public class Nursery {
 		this.rating = rating;
 	}
 
+	
 	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, String email,
-			String phoneNumber) {
+			String phoneNumber, String address, String state, String zipcode) {
 		super();
 		this.nurseryId = nurseryId;
 		this.nurseryName = nurseryName;
@@ -156,6 +189,9 @@ public class Nursery {
 		this.secondaryColor = secondaryColor;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.state = state;
+		this.zipcode = zipcode;
 	}
 
 	public Nursery() {

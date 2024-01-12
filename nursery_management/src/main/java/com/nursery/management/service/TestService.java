@@ -15,7 +15,10 @@ import com.nursery.management.repository.TestRepository;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TestService {
@@ -83,17 +86,34 @@ public class TestService {
 		return testRepository.findAll();
 	}
 
-    public List<Test> getTestsForPatientInNursery(String patientId, String nurseryId) {
-        return testRepository.findByPatientIdAndNurseryId(patientId, nurseryId);
-    }
+	public List<Test> getTestsForPatientInNursery(String patientId, String nurseryId) {
+		return testRepository.findByPatientIdAndNurseryId(patientId, nurseryId);
+	}
 
-    public List<Test> getTestsForCareTakerInNursery(String careTakerEmail, String nurseryId) {
-        return testRepository.findByCareTakerIdAndNurseryId(careTakerEmail, nurseryId);
-    }
-    
-    public List<Test> getTestsForCareTakerAndPatient(String careTakerEmail, String nurseryId, String patientEmail) {
-        return testRepository.findByCareTakerIdAndNurseryIdAndPatientId(careTakerEmail, nurseryId, patientEmail);
-    }
-    
+	public List<Test> getTestsForCareTakerInNursery(String careTakerEmail, String nurseryId) {
+		return testRepository.findByCareTakerIdAndNurseryId(careTakerEmail, nurseryId);
+	}
+
+	public List<Test> getTestsForCareTakerAndPatient(String careTakerEmail, String nurseryId, String patientEmail) {
+		return testRepository.findByCareTakerIdAndNurseryIdAndPatientId(careTakerEmail, nurseryId, patientEmail);
+	}
+
+	public List<CareTaker> getCrateTakerByPatientId(String nurseryId, String patientId) {
+		Set<CareTaker> caretakerSet = new HashSet<CareTaker>();
+		List<Test> tests = getTestsForPatientInNursery(patientId, nurseryId);
+		for (Test test : tests) {
+			test.getCaretaker();
+			if (caretakerSet.contains(test.getCaretaker()))
+				continue;
+			else {
+				caretakerSet.add(test.getCaretaker());
+			}
+		}
+		List<CareTaker> mainList = new ArrayList<CareTaker>();
+
+		mainList.addAll(caretakerSet);
+		return mainList;
+
+	}
 
 }
