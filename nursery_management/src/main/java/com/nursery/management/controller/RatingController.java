@@ -3,6 +3,7 @@ package com.nursery.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.nursery.management.entity.Nursery;
@@ -27,9 +28,9 @@ public class RatingController {
 	}
 
 	@PostMapping("/rate/{nurseryId}/{patientId}/{caretakerId}/{rating}")
-	public void rateCaretaker(@PathVariable String nurseryId, @PathVariable String patientId, @PathVariable String caretakerId,
+	public ResponseEntity<?> rateCaretaker(@PathVariable String nurseryId, @PathVariable String patientId, @PathVariable String caretakerId,
 			@PathVariable double rating) {
-		ratingService.rateCaretaker(patientId, caretakerId, nurseryId, rating);
+		return ratingService.rateCaretaker(patientId, caretakerId, nurseryId, rating);
 	}
 
 	@GetMapping("/average/{caretakerId}")

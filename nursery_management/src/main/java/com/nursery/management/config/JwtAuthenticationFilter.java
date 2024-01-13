@@ -3,8 +3,6 @@ package com.nursery.management.config;
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,15 +25,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 			FilterChain filterChain) throws IOException, ServletException {
 		String authorizationHeader = httpServletRequest.getHeader("Authorization");
+		String nurseryId = httpServletRequest.getHeader("tenant");
 
 		if (authorizationHeaderIsInvalid(authorizationHeader)) {
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 			return;
 		}
+		authorizationHeader = authorizationHeader.substring(7);
 		String requestURI = httpServletRequest.getRequestURI();
-		String[] pathSegments = requestURI.split("/");
+		
 
-		String nurseryId = pathSegments[pathSegments.length - 1];
 		UsernamePasswordAuthenticationToken token = createToken(authorizationHeader, nurseryId);
 
 		SecurityContextHolder.getContext().setAuthentication(token);
@@ -46,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		return authorizationHeader == null || !authorizationHeader.startsWith("Bearer ");
 	}
 
-	private UsernamePasswordAuthenticationToken createToken(String authorizationHeader, String nurseryId) {
+	private UsernamePasswordAuthenticationToken createToken(String authorizationHeader, String nurseryId) throws IOException {
 		String token = authorizationHeader.replace("Bearer ", "");
 		CurrentUser userPrincipal = tokenService.parseToken(token, nurseryId);
 

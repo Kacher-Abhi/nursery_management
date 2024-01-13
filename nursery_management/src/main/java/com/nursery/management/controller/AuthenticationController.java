@@ -10,8 +10,17 @@ import com.nursery.management.entity.JwtResponse;
 import com.nursery.management.service.CurrentUserService;
 import com.nursery.management.service.TokenService;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,18 +32,35 @@ public class AuthenticationController {
 	private TokenService tokenService;
 	@Autowired
 	private CurrentUserService currentUserService;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/token")
-	public JwtResponse postMethodName(@RequestParam("nurseryId") String nurseryId,
-			@RequestParam("username") String username, @RequestParam("password") String password) {
-		// TODO: process POST request
-		String combinedUsername = username + ":" + nurseryId;
+	public ResponseEntity<?> postMethodName(@RequestParam("nurseryId") String nurseryId,
+			@RequestParam("username") String username, @RequestParam("password") String password) throws AuthenticationException {
+		
+		try {
+	        String combinedUsername = username + ":" + nurseryId;
+	        UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
 
-		UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+	        // Authenticate the user
+	        Authentication authenticationToken =
+	                new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+            authenticationToken = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+	        if(!authenticationToken.isAuthenticated()) {
+	        	throw new AuthenticationException("User credentials are not correct");
+	        }
 
-		JwtResponse response = tokenService.generateToken((CurrentUser) user, nurseryId);
+	        // If no exception is thrown, the authentication was successful
+	        // Generate and return the JWT token
+	        JwtResponse response = tokenService.generateToken((CurrentUser) user, nurseryId);
+	        return ResponseEntity.status(HttpStatus.OK).body(response);
 
-		return response;
-	}
-
+	    } catch (AuthenticationException e) {
+	        // Handle authentication failure
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+	    }
+}
 }

@@ -28,22 +28,23 @@ public class CurrentUserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String input) throws UsernameNotFoundException {
 
 		String[] split = input.split(":");
-		String username = split[0];
-		String nurseryId = split[1];
+	    String username = split[0];
+	    String nurseryId = split[1];
 
-		Admin admin = adminRepository.existsByEmailAndNursery(username, nurseryId);
-		if (admin != null) {
-			System.out.println("Admin found with email " + username);
-			return new CurrentUser(admin);
-		}
+	    Admin admin = adminRepository.existsByEmailAndNursery(username, nurseryId);
+	    if (admin != null) {
+	        System.out.println("Admin found with email " + username);
+	        return new CurrentUser(admin);
+	    }
 
-		Patient patient = patientRepository.findByEmail(username);
-		if (patient != null) {
-			return new CurrentUser(patient);
-		}
+	    Patient patient = patientRepository.findByEmail(username);
+	    if (patient != null) {
+	        return new CurrentUser(patient);
+	    }
 
-		CareTaker careTaker = careTakerRepository.findByEmail(username).get();
+	    CareTaker careTaker = careTakerRepository.findByEmail(username).orElse(null);
 
-		throw new UsernameNotFoundException("User not found with username: " + username);
+	    // Return null if the user is not found
+	    return (careTaker != null) ? new CurrentUser(careTaker) : null;
 	}
 }
