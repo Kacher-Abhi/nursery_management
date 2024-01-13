@@ -1,11 +1,14 @@
 package com.nursery.management.service;
 
+import java.io.IOException;
 import java.security.Key;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.config.JwtSecretGenerator;
@@ -45,8 +48,8 @@ public class TokenService {
 		return reponse;
 	}
 
-	public CurrentUser parseToken(String token, String nurseryId) {
-	    var jwtSecret = jwtSecService.getExisting(nurseryId);
+	public CurrentUser parseToken(String token, String nurseryId) throws IOException {
+	    JwtSec jwtSecret = jwtSecService.getExisting(nurseryId);
 		byte[] secretBytes = jwtSecret.getSecretKey().getBytes();
 		
 
@@ -55,6 +58,8 @@ public class TokenService {
 		String username = jwsClaims.getBody().getSubject();
 		String role = jwsClaims.getBody().get("role", String.class);
 		String tenant = jwsClaims.getBody().get("tenant", String.class);
+		
+		if(!tenant.equals(nurseryId)) throw new UsernameNotFoundException("You dont have permission to view this");
 
 		return new CurrentUser(username, role, tenant);
 	}

@@ -3,8 +3,12 @@ package com.nursery.management.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +42,22 @@ public class CareTakerController {
 	}
 
 	@GetMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> getCaretakerById(@PathVariable String caretakerId) {
+	public ResponseEntity<?> getCaretakerById(@PathVariable String caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            String nursery_id = "";
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                nursery_id = userDetails.getUsername().split(":")[0];
+            }
+            if(!nursery_id.isBlank() && !nursery_id.isEmpty() && !nursery_id.equals(caretaker.getNursery())) {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
+            }
+        }
 		if (caretaker != null) {
 			return ResponseEntity.ok(caretaker);
 		} else {

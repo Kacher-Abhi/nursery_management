@@ -28,7 +28,7 @@ public class CurrentUser implements UserDetails {
 		this.email = user.getEmail();
 		this.password = user.getPassword();
 		this.nursery_id = user.getNursery().getNurseryId();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+		this.role = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
 	}
 
 	public CurrentUser(Patient user) {
@@ -36,7 +36,7 @@ public class CurrentUser implements UserDetails {
 		this.email = user.getEmail();
 		this.password = user.getPassword();
 		this.nursery_id = user.getNurseryId();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+		this.role = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
 	}
 
 	public CurrentUser(CareTaker user) {
@@ -44,12 +44,12 @@ public class CurrentUser implements UserDetails {
 		this.email = user.getEmail();
 		this.password = user.getPassword();
 		this.nursery_id = user.getNurseryId();
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+user.getAuthorities()));
+		this.role = Arrays.asList(new SimpleGrantedAuthority(user.getAuthorities()));
 	}
 	
 	public CurrentUser(String username, String role, String nursery_id) {
 		this.email = username;
-		this.role = Arrays.asList(new SimpleGrantedAuthority("ROLE_"+role));
+		this.role = Arrays.asList(new SimpleGrantedAuthority(role));
 		this.nursery_id = nursery_id;
 	}
 
@@ -68,7 +68,7 @@ public class CurrentUser implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return email;
+		return email+":" + nursery_id;
 	}
 	public String getTenant() {
 		return nursery_id;
