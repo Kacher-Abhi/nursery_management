@@ -44,6 +44,9 @@ public class AuthenticationController {
 	        String combinedUsername = username + ":" + nurseryId;
 	        UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
 
+	        if (user == null) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User credentials doesn't match with our records");
+			}
 	        // Authenticate the user
 	        Authentication authenticationToken =
 	                new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());

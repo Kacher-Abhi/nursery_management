@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import com.nursery.management.entity.Admin;
 import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Rating;
@@ -59,9 +60,21 @@ public class CareTakerService {
 		return careTakerRepository.findById(caretakerId).orElse(null);
 	}
 
-	public CareTaker updateCaretaker(CareTaker updatedCaretaker) {
+	public CareTaker updateCaretaker(String caretakerId, CareTaker updatedCaretaker) {
 		// Perform any additional validation or business logic if needed
-		return careTakerRepository.save(updatedCaretaker);
+		CareTaker existingCaretaker = getCaretakerById(caretakerId);
+
+		existingCaretaker.setName(updatedCaretaker.getName());
+		existingCaretaker.setAge(updatedCaretaker.getAge());
+		existingCaretaker.setPhoneNumber(updatedCaretaker.getPhoneNumber());
+		existingCaretaker.setEmail(updatedCaretaker.getEmail());
+//		existingCaretaker.setPassword(updatedCaretaker.getPassword());
+		existingCaretaker.setSex(updatedCaretaker.getSex());
+//		existingCaretaker.setNurseryId(updatedCaretaker.getNursery().getNurseryId());
+		existingCaretaker.setYearsOfExperience(updatedCaretaker.getYearsOfExperience());
+		existingCaretaker.setDesignation(updatedCaretaker.getDesignation());
+//		existingCaretaker.setAuthorities(existingCaretaker.getAuthorities());
+		return careTakerRepository.save(existingCaretaker);
 	}
 
 	public void deleteCaretaker(String caretakerId) {

@@ -43,6 +43,7 @@ public class TokenService {
 				.compact();
 		JwtResponse reponse = new JwtResponse();
 		reponse.setExpires(expirationDate);
+		reponse.setRole(user.getUserRole());
 		reponse.setToken(compactTokenString);
 
 		return reponse;

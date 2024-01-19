@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,33 +32,62 @@ public class CareTakerController {
 	private CareTakerService caretakerService;
 
 	@GetMapping
+	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 	public List<CareTaker> getAllCaretakers() {
 		return caretakerService.getAllCaretakers();
 	}
 
 	@GetMapping("/byNursery/{nurseryId}")
-	public ResponseEntity<List<CareTaker>> getCaretakersByNursery(@PathVariable String nurseryId) {
+//	PreAuthorize()
+	// Super_admin, nursery_admin
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+	public ResponseEntity<?> getCaretakersByNursery(@PathVariable String nurseryId) {
 		List<CareTaker> caretakers = caretakerService.getCaretakersByNurseryId(nurseryId);
-		return ResponseEntity.ok(caretakers);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()) {
+			Object principal = authentication.getPrincipal();
+			String nursery_id = "";
+			String role = "";
+			if (principal instanceof UserDetails) {
+				UserDetails userDetails = (UserDetails) principal;
+				nursery_id = userDetails.getUsername().split(":")[1];
+				role = userDetails.getAuthorities().toArray()[0].toString();
+			}
+			if ((!role.equals("ROLE_SUPER_ADMIN")) && !nursery_id.isBlank() && !nursery_id.isEmpty()
+					&& !nursery_id.equals(nurseryId)) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
+			}
+		}
+		if (caretakers != null) {
+			return ResponseEntity.ok(caretakers);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 
 	@GetMapping("/{caretakerId}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN') or hasRole('ROLE_PATIENT')or hasRole('ROLE_CARETAKER')")
 	public ResponseEntity<?> getCaretakerById(@PathVariable String caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-        if (authentication != null && authentication.isAuthenticated()) {
-            Object principal = authentication.getPrincipal();
-            String nursery_id = "";
-            if (principal instanceof UserDetails) {
-                UserDetails userDetails = (UserDetails) principal;
-                nursery_id = userDetails.getUsername().split(":")[0];
-            }
-            if(!nursery_id.isBlank() && !nursery_id.isEmpty() && !nursery_id.equals(caretaker.getNursery())) {
-            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
-            }
-        }
+
+		if (authentication != null && authentication.isAuthenticated()) {
+			Object principal = authentication.getPrincipal();
+			String nursery_id = "";
+			String role = "";
+			if (principal instanceof UserDetails) {
+				UserDetails userDetails = (UserDetails) principal;
+				nursery_id = userDetails.getUsername().split(":")[1];
+				role = userDetails.getAuthorities().toArray()[0].toString();
+			}
+			if ((!role.equals("ROLE_SUPER_ADMIN")) && !nursery_id.isBlank() && !nursery_id.isEmpty()
+					&& !nursery_id.equals(caretaker.getNursery().getNurseryId())) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
+			}
+		}
 		if (caretaker != null) {
 			return ResponseEntity.ok(caretaker);
 		} else {
@@ -66,6 +96,7 @@ public class CareTakerController {
 	}
 
 	@PostMapping("/createCaretaker")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
 	public ResponseEntity<?> createCareTaker(@RequestBody CareTaker careTaker) {
 		try {
 			CareTaker createCareTaker = caretakerService.createCaretaker(careTaker);
@@ -78,13 +109,29 @@ public class CareTakerController {
 	}
 
 	@PutMapping("/{caretakerId}")
-	public ResponseEntity<CareTaker> updateCaretaker(@PathVariable String caretakerId,
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN') or hasRole('ROLE_CARETAKER')")
+	public ResponseEntity<?> updateCaretaker(@PathVariable String caretakerId,
 			@RequestBody CareTaker updatedCaretaker) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		if (authentication != null && authentication.isAuthenticated()) {
+			Object principal = authentication.getPrincipal();
+			String nursery_id = "";
+			String role = "";
+			if (principal instanceof UserDetails) {
+				UserDetails userDetails = (UserDetails) principal;
+				nursery_id = userDetails.getUsername().split(":")[1];
+				role = userDetails.getAuthorities().toArray()[0].toString();
+			}
+			if ((!role.equals("ROLE_SUPER_ADMIN")) && !nursery_id.isBlank() && !nursery_id.isEmpty()
+					&& !nursery_id.equals(caretaker.getNursery().getNurseryId())) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
+			}
+		}
 		if (caretaker != null) {
 			updatedCaretaker.setCaretakerId(caretakerId);
-			CareTaker savedCaretaker = caretakerService.updateCaretaker(updatedCaretaker);
+			CareTaker savedCaretaker = caretakerService.updateCaretaker(caretakerId, updatedCaretaker);
 			return ResponseEntity.ok(savedCaretaker);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -104,8 +151,25 @@ public class CareTakerController {
 	}
 
 	@DeleteMapping("/{caretakerId}")
-	public ResponseEntity<Void> deleteCaretaker(@PathVariable String caretakerId) {
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+	public ResponseEntity<?> deleteCaretaker(@PathVariable String caretakerId) {
 		CareTaker caretaker = caretakerService.getCaretakerById(caretakerId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()) {
+			Object principal = authentication.getPrincipal();
+			String nursery_id = "";
+			String role = "";
+			if (principal instanceof UserDetails) {
+				UserDetails userDetails = (UserDetails) principal;
+				nursery_id = userDetails.getUsername().split(":")[1];
+				role = userDetails.getAuthorities().toArray()[0].toString();
+			}
+			if ((!role.equals("ROLE_SUPER_ADMIN")) && !nursery_id.isBlank() && !nursery_id.isEmpty()
+					&& !nursery_id.equals(caretaker.getNursery().getNurseryId())) {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You dont have access to this!");
+			}
+		}
 
 		if (caretaker != null) {
 			caretakerService.deleteCaretaker(caretakerId);

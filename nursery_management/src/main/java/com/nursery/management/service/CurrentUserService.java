@@ -37,12 +37,13 @@ public class CurrentUserService implements UserDetailsService {
 	        return new CurrentUser(admin);
 	    }
 
-	    Patient patient = patientRepository.findByEmail(username);
+	    Patient patient = patientRepository.existsByEmailAndNursery(username, nurseryId);
 	    if (patient != null) {
+	        System.out.println("Patient found with email " + username);
 	        return new CurrentUser(patient);
 	    }
 
-	    CareTaker careTaker = careTakerRepository.findByEmail(username).orElse(null);
+	    CareTaker careTaker = careTakerRepository.existsByEmailAndNursery(username, nurseryId);
 
 	    // Return null if the user is not found
 	    return (careTaker != null) ? new CurrentUser(careTaker) : null;

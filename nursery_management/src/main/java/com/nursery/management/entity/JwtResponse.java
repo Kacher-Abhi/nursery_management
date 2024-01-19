@@ -5,6 +5,14 @@ import java.util.Date;
 public class JwtResponse {
 	private String token;
 	private Date expires;
+	private String role;
+	
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
 	public String getToken() {
 		return token;
 	}
@@ -17,10 +25,11 @@ public class JwtResponse {
 	public void setExpires(Date expires) {
 		this.expires = expires;
 	}
-	public JwtResponse(String token, Date expires) {
+	public JwtResponse(String token, Date expires, String role) {
 		super();
 		this.token = token;
 		this.expires = expires;
+		this.role = role;
 	}
 	public JwtResponse() {
 		super();

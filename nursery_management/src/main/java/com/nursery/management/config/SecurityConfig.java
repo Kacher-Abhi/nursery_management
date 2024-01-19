@@ -13,6 +13,9 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +35,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @SuppressWarnings("deprecation")
 public class SecurityConfig {
 	
@@ -40,9 +44,6 @@ public class SecurityConfig {
 	
 	@Autowired
 	private CurrentUserService userDetailsService;
-	
-	
-
 	   
 	private final TokenService tokenService;
 
@@ -90,7 +91,10 @@ public class SecurityConfig {
 		.and()
 		.authorizeRequests()
 		.requestMatchers("/auth", "/auth/token").permitAll()
-		.requestMatchers("/admins/**").hasRole("ADMIN")
+		.requestMatchers("/nurseries").permitAll()
+		.requestMatchers("/admins").authenticated()
+		.requestMatchers("/caretakers").authenticated()
+		.requestMatchers("/patients").authenticated()
 		.and()
 		.addFilterBefore(new JwtAuthenticationFilter(TokenService)
 		,UsernamePasswordAuthenticationFilter.class);

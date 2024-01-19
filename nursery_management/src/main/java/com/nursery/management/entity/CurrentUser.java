@@ -35,7 +35,7 @@ public class CurrentUser implements UserDetails {
 		this.id = user.getPatientId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.nursery_id = user.getNurseryId();
+		this.nursery_id = user.getNursery().getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
 	}
 
@@ -43,7 +43,7 @@ public class CurrentUser implements UserDetails {
 		this.id = user.getCaretakerId();
 		this.email = user.getEmail();
 		this.password = user.getPassword();
-		this.nursery_id = user.getNurseryId();
+		this.nursery_id = user.getNursery().getNurseryId();
 		this.role = Arrays.asList(new SimpleGrantedAuthority(user.getAuthorities()));
 	}
 	

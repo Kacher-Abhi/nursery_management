@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.nursery.management.entity.Admin;
+import com.nursery.management.entity.CareTaker;
 import com.nursery.management.entity.Nursery;
 import com.nursery.management.entity.Role;
 import com.nursery.management.repository.AdminRepository;
@@ -29,7 +30,10 @@ public class AdminService {
 		return adminRepository.findAll();
 	}
 
-	public List<Admin> getAdminsByNursery(Nursery nursery) {
+	public List<Admin> getAdminsByNurseryId(String nurseryId) {
+		Nursery nursery = nurseryRepository.findById(nurseryId)
+				.orElseThrow(() -> new EntityNotFoundException("Nursery not found with id: " + nurseryId));
+
 		return adminRepository.findByNursery(nursery);
 	}
 
@@ -66,9 +70,6 @@ public class AdminService {
 		existingAdmin.setLastName(updatedAdmin.getLastName());
 		existingAdmin.setEmail(updatedAdmin.getEmail());
 		existingAdmin.setPhone_number(updatedAdmin.getPhone_number());
-		existingAdmin.setPassword(updatedAdmin.getPassword());
-		existingAdmin.setSuperAdmin(updatedAdmin.isSuperAdmin());
-
 		// Save the updated admin
 		return adminRepository.save(existingAdmin);
 	}

@@ -58,6 +58,19 @@ public class PatientService {
 				.orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
 	}
 
+	public Patient updatePatient(String patientId, Patient updatedPatient) {
+		// Perform any additional validation or business logic if needed
+		Patient existingPatient = getPatientById(patientId);
+
+		existingPatient.setFirstName(updatedPatient.getFirstName());
+		existingPatient.setLastName(updatedPatient.getLastName());
+		existingPatient.setAge(updatedPatient.getAge());
+		existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+		existingPatient.setEmail(updatedPatient.getEmail());
+		existingPatient.setSex(updatedPatient.getSex());
+		return patientRepository.save(existingPatient);
+	}
+	
 	public void deletePatient(String patientId) {
 		Patient admin = getPatientById(patientId);
 		patientRepository.delete(admin);
