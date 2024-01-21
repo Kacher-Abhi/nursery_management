@@ -92,9 +92,9 @@ public class SecurityConfig {
 		.authorizeRequests()
 		.requestMatchers("/auth", "/auth/token").permitAll()
 		.requestMatchers("/nurseries").permitAll()
-		.requestMatchers("/admins").authenticated()
-		.requestMatchers("/caretakers").authenticated()
-		.requestMatchers("/patients").authenticated()
+		.requestMatchers("/admins").permitAll()
+		.requestMatchers("/caretakers").permitAll()
+		.requestMatchers("/patients").permitAll()
 		.and()
 		.addFilterBefore(new JwtAuthenticationFilter(TokenService)
 		,UsernamePasswordAuthenticationFilter.class);

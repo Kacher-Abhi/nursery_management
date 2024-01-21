@@ -96,7 +96,7 @@ public class CareTakerController {
 	}
 
 	@PostMapping("/createCaretaker")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
 	public ResponseEntity<?> createCareTaker(@RequestBody CareTaker careTaker) {
 		try {
 			CareTaker createCareTaker = caretakerService.createCaretaker(careTaker);
