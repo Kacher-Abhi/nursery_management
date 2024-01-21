@@ -102,7 +102,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/createAdmin")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
 	public ResponseEntity<?> createAdmin(@RequestBody Admin admin) {
 		try {
 			Admin createdAdmin = adminService.createAdmin(admin);

@@ -44,7 +44,7 @@ public class PatientController {
 	}
 
 	@PostMapping("/createPatient")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> createPatient(@RequestBody Patient patient) {
 		Patient createdPatient = patientService.createPatient(patient);
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -65,6 +65,19 @@ public class PatientController {
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
 	}
+	
+//	@PostMapping("/createPatient")
+////	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+//	public ResponseEntity<?> createPatient(@RequestBody Patient patient) {
+//		try {
+//			Patient createdPatient = patientService.createPatient(patient);
+//			return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//
+//		}
+//	}
 
 	@GetMapping("/byNursery/{nurseryId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
