@@ -21,9 +21,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -66,4 +68,19 @@ public class AuthenticationController {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 	    }
 }
+	@PostMapping("/findByEmail")
+	public ResponseEntity<?> findUserByEmail(@RequestParam("nurseryId")String nurseryId,@RequestParam("email") String email)throws Exception{
+		try {
+	        String combinedUsername = email + ":" + nurseryId;
+	        UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+	        if (user == null) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User credentials doesn't match with our records");
+			}
+	        return ResponseEntity.status(HttpStatus.OK).body(user);
+		}
+		catch (Exception e) {
+	       
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not with the provided details");
+	    }
+	}
 }
