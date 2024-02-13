@@ -52,7 +52,7 @@ public class TestController {
 			@RequestParam("testTakenTime") LocalTime testTakenTime,
 
 			final @RequestParam("testResult") MultipartFile file,
-			final @RequestParam("prescription") MultipartFile prescription,
+			final @RequestParam("description") MultipartFile prescription,
 
 			Model model, HttpServletRequest request) {
 		try {
@@ -95,10 +95,11 @@ public class TestController {
 			createdtest.setTestTakenDate(testTakenDate);
 			createdtest.setTestTakenTime(testTakenTime);
 
-			createdtest.setImage(imageData);
+			createdtest.setTestResult(imageData);
 			createdtest.setPrescription(prescriptionData);
 
 			testService.createTest(createdtest);
+//			System.out.println("Received Parameters - testName: " + testName + ", result: " + result + ", nurseryId: " + nurseryId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("test created");
 		} catch (Exception e) {
 			e.printStackTrace();

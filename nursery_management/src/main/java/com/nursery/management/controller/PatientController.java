@@ -38,7 +38,7 @@ public class PatientController {
 	private CareTakerService careTakerService;
 
 	@GetMapping
-	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 	public List<Patient> getAllPatients() {
 		return patientService.getAllPatients();
 	}

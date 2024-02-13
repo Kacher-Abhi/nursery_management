@@ -32,7 +32,7 @@ public class CareTakerController {
 	private CareTakerService caretakerService;
 
 	@GetMapping
-	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 	public List<CareTaker> getAllCaretakers() {
 		return caretakerService.getAllCaretakers();
 	}
@@ -40,7 +40,7 @@ public class CareTakerController {
 	@GetMapping("/byNursery/{nurseryId}")
 //	PreAuthorize()
 	// Super_admin, nursery_admin
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
 	public ResponseEntity<?> getCaretakersByNursery(@PathVariable String nurseryId) {
 		List<CareTaker> caretakers = caretakerService.getCaretakersByNurseryId(nurseryId);
 

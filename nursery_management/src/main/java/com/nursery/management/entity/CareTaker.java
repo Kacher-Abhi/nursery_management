@@ -37,7 +37,7 @@ public class CareTaker {
 	@Transient
 	private String nurseryId;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "nursery_id")
 	private Nursery nursery;
@@ -48,10 +48,14 @@ public class CareTaker {
 	@JsonIgnore
 	@OneToMany(mappedBy = "caretaker")
 	private List<Test> test;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "caretaker")
 	private List<Patient> patient;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "caretaker")
+	private List<Notes> notes;
 
 	public String getCaretakerId() {
 		return caretakerId;
@@ -179,6 +183,14 @@ public class CareTaker {
 
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
+	}
+
+	public List<Notes> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Notes> notes) {
+		this.notes = notes;
 	}
 
 	public CareTaker(String caretakerId, String name, int age, String phoneNumber, String email, String password,
