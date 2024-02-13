@@ -36,7 +36,7 @@ public class Patient {
 
 	@Transient
 	private String nurseryId;
-	
+
 	@Transient
 	private String careTakerId;
 
@@ -51,11 +51,14 @@ public class Patient {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Rating> ratings;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Test> test;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "patient")
+	private List<Notes> notes;
 
 	public String getPatientId() {
 		return patientId;
@@ -168,13 +171,21 @@ public class Patient {
 	public void setRatings(List<Rating> ratings) {
 		this.ratings = ratings;
 	}
-	
+
 	public List<Test> getTest() {
 		return test;
 	}
 
 	public void setTest(List<Test> test) {
 		this.test = test;
+	}
+
+	public List<Notes> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Notes> notes) {
+		this.notes = notes;
 	}
 
 	public Patient(String patientId, String firstName, String lastName, int age, String phoneNumber, String email,

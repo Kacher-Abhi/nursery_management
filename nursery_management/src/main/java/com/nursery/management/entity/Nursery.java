@@ -63,6 +63,9 @@ public class Nursery {
 	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
 	private List<Test> test;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "nursery", cascade = CascadeType.ALL)
+	private List<Notes> notes;
 	@Lob
 	@Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
 	private byte[] image;
@@ -179,6 +182,13 @@ public class Nursery {
 		this.rating = rating;
 	}
 
+	public List<Notes> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Notes> notes) {
+		this.notes = notes;
+	}
 	
 	public Nursery(String nurseryId, String nurseryName, String primaryColor, String secondaryColor, String email,
 			String phoneNumber, String address, String state, String zipcode) {

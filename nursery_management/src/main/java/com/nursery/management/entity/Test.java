@@ -24,10 +24,6 @@ public class Test {
 	@Column(nullable = false)
 	private String result;
 
-//	private String careTakerEmail;
-//
-//	private String patientEmail;
-
 	@Transient
 	private String nurseryId;
 
@@ -52,26 +48,18 @@ public class Test {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate testTakenDate;
 
-	@JsonFormat(pattern = "HH:mm:ss")
+	@JsonFormat(pattern = "HH:mm")
 	private LocalTime testTakenTime;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Lob
 	@Column(name = "TestResult", length = Integer.MAX_VALUE, nullable = true)
 	private byte[] testResult;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Lob
 	@Column(name = "Prescription", length = Integer.MAX_VALUE, nullable = true)
 	private byte[] prescription;
-
-	public byte[] getPrescription() {
-		return prescription;
-	}
-
-	public void setPrescription(byte[] prescription) {
-		this.prescription = prescription;
-	}
 
 	public Long getTestId() {
 		return testId;
@@ -129,22 +117,6 @@ public class Test {
 		this.testTakenTime = testTakenTime;
 	}
 
-//	public String getCareTakerEmail() {
-//		return careTakerEmail;
-//	}
-//
-//	public void setCareTakerEmail(String careTakerEmail) {
-//		this.careTakerEmail = careTakerEmail;
-//	}
-//
-//	public String getPatientEmail() {
-//		return patientEmail;
-//	}
-//
-//	public void setPatientEmail(String patientEmail) {
-//		this.patientEmail = patientEmail;
-//	}
-
 	public String getPatientId() {
 		return patientId;
 	}
@@ -177,12 +149,20 @@ public class Test {
 		this.caretaker = caretaker;
 	}
 
-	public byte[] getImage() {
+	public byte[] getTestResult() {
 		return testResult;
 	}
 
-	public void setImage(byte[] testResult) {
+	public void setTestResult(byte[] testResult) {
 		this.testResult = testResult;
+	}
+
+	public byte[] getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(byte[] prescription) {
+		this.prescription = prescription;
 	}
 
 	public Test(Long testId, String testName, String result, LocalDate testTakenDate, LocalTime testTakenTime,
