@@ -32,55 +32,87 @@ public class AuthenticationController {
 
 	@Autowired
 	private TokenService tokenService;
+
 	@Autowired
 	private CurrentUserService currentUserService;
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/token")
 	public ResponseEntity<?> postMethodName(@RequestParam("nurseryId") String nurseryId,
-			@RequestParam("username") String username, @RequestParam("password") String password) throws AuthenticationException {
-		
+			@RequestParam("username") String username, @RequestParam("password") String password)
+			throws AuthenticationException {
+
 		try {
-	        String combinedUsername = username + ":" + nurseryId;
-	        UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+			String combinedUsername = username + ":" + nurseryId;
+			UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
 
-	        if (user == null) {
-				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User credentials doesn't match with our records");
+			if (user == null) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body("User credentials doesn't match with our records");
 			}
-	        // Authenticate the user
-	        Authentication authenticationToken =
-	                new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
-            authenticationToken = authenticationManager.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-	        if(!authenticationToken.isAuthenticated()) {
-	        	throw new AuthenticationException("User credentials are not correct");
-	        }
-
-	        // If no exception is thrown, the authentication was successful
-	        // Generate and return the JWT token
-	        JwtResponse response = tokenService.generateToken((CurrentUser) user, nurseryId);
-	        return ResponseEntity.status(HttpStatus.OK).body(response);
-
-	    } catch (AuthenticationException e) {
-	        // Handle authentication failure
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-	    }
-}
-	@PostMapping("/findByEmail")
-	public ResponseEntity<?> findUserByEmail(@RequestParam("nurseryId")String nurseryId,@RequestParam("email") String email)throws Exception{
-		try {
-	        String combinedUsername = email + ":" + nurseryId;
-	        UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
-	        if (user == null) {
-				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User credentials doesn't match with our records");
+			// Authenticate the user
+			Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user, password,
+					user.getAuthorities());
+			authenticationToken = authenticationManager.authenticate(authenticationToken);
+			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			if (!authenticationToken.isAuthenticated()) {
+				throw new AuthenticationException("User credentials are not correct");
 			}
-	        return ResponseEntity.status(HttpStatus.OK).body(user);
+
+			// If no exception is thrown, the authentication was successful
+			// Generate and return the JWT token
+			JwtResponse response = tokenService.generateToken((CurrentUser) user, nurseryId);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+
+		} catch (AuthenticationException e) {
+			// Handle authentication failure
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 		}
-		catch (Exception e) {
-	       
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not with the provided details");
-	    }
 	}
+
+	@PostMapping("/forgotPassword")
+	public ResponseEntity<?> forgotPassword(@RequestParam("nurseryId") String nurseryId,
+			@RequestParam("email") String email) throws AuthenticationException {
+		try {
+			// Combine email and nurseryId to create a unique identifier
+			String combinedUsername = email + ":" + nurseryId;
+
+			// Check if the user exists
+			UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+			if (user == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with the provided email");
+			}
+
+			// Generate a time-bound security reset token
+			JwtResponse resetToken = tokenService.generatePasswordToken((CurrentUser) user, nurseryId);
+
+			// Send the reset token in an email (You can implement this part separately)
+
+			return ResponseEntity.status(HttpStatus.OK).body(resetToken);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error processing forgot password request");
+		}
+	}
+
+	@PostMapping("/findByEmail")
+	public ResponseEntity<?> findUserByEmail(@RequestParam("nurseryId") String nurseryId,
+			@RequestParam("email") String email) throws AuthenticationException {
+		try {
+			String combinedUsername = email + ":" + nurseryId;
+			UserDetails user = currentUserService.loadUserByUsername(combinedUsername);
+			if (user == null) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN)
+						.body("User credentials doesn't match with our records");
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(user);
+		} catch (Exception e) {
+
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not with the provided details");
+		}
+	}
+
 }
